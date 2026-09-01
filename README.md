@@ -8,11 +8,22 @@
   <a href="https://stride-devgusta5.vercel.app">stride-devgusta5.vercel.app</a>
 </p>
 
-<p align="center">
-  <img src="icons/qrcode.png" width="160" height="160" alt="QR code para abrir o Stride no celular">
-  <br>
-  <sub>Aponte a câmera para abrir e instalar como app</sub>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://stride-devgusta5.vercel.app">
+        <img src="icons/qrcode.png" width="150" height="150" alt="QR code do site">
+      </a>
+      <br><sub><b>Web</b> — abre o PWA no navegador</sub>
+    </td>
+    <td align="center">
+      <a href="https://stride-devgusta5.vercel.app/download/stride.apk">
+        <img src="icons/qrcode-apk.png" width="150" height="150" alt="QR code do APK">
+      </a>
+      <br><sub><b>APK</b> — instala como app Android</sub>
+    </td>
+  </tr>
+</table>
 
 PWA de acompanhamento de um plano de estudos de 25 dias para preparação técnica de
 processo seletivo: algoritmos, live coding, JavaScript, Web e Backend.
@@ -60,19 +71,20 @@ Abra `http://localhost:8080`. Em `localhost` o service worker registra normalmen
 - **Desktop (Chrome/Edge):** ícone de instalar na barra de endereço.
 - **iOS/Safari:** Compartilhar → *Adicionar à Tela de Início* (o iOS ignora o prompt automático).
 
-### APK (Android)
+### Gerar o APK (opcional)
 
-Empacotado com o [PWABuilder](https://www.pwabuilder.com/) a partir do manifest do próprio
-site. É um instalável fora da Play Store, então o Android vai pedir permissão de **instalar
-apps de fontes desconhecidas** na primeira vez.
+O `.apk` do QR acima foi empacotado com o [PWABuilder](https://www.pwabuilder.com/), que lê o
+manifest do site já publicado e gera um APK/AAB assinado sem precisar escrever código nativo —
+é um instalável fora da Play Store, então o Android pede permissão de **instalar apps de
+fontes desconhecidas** na primeira vez.
 
-<p align="center">
-  <a href="https://stride-devgusta5.vercel.app/download/stride.apk">
-    <img src="icons/qrcode-apk.png" width="160" height="160" alt="QR code para baixar o APK do Stride">
-  </a>
-  <br>
-  <sub>Baixar <code>stride.apk</code></sub>
-</p>
+Pra gerar o seu, depois de publicar seu fork: acesse o PWABuilder, cole a URL do seu deploy,
+gere o pacote **Android**, baixe o `.apk`, hospede o arquivo em algum lugar público (aqui ele
+mora em `download/stride.apk`, servido pelo próprio Vercel) e transforme o link em QR code —
+local, sem depender de serviço externo, com `npx qrcode -o qrcode.png "https://sua-url/stride.apk"`.
+
+Guarde a `signing.keystore` (chave de assinatura) gerada pelo PWABuilder em lugar seguro fora
+do git — ela é necessária pra publicar atualizações do mesmo pacote depois.
 
 ## Progresso
 
