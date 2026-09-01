@@ -48,22 +48,6 @@ Abra `http://localhost:8080`. Em `localhost` o service worker registra normalmen
 > **Service worker só funciona em HTTPS** (ou em `localhost`). Abrir o `index.html` com duplo
 > clique — `file://` — não registra o SW e não instala como app.
 
-## Publicar
-
-Qualquer host estático serve. Duas opções simples:
-
-### GitHub Pages
-
-Settings → Pages → Source: `Deploy from a branch`, branch `main`, pasta `/ (root)`.
-
-### Vercel
-
-```bash
-npx vercel --prod
-```
-
-Sem framework e sem build — deploy de site estático.
-
 ## Instalar como app
 
 - **Android/Chrome:** botão **Instalar app** no rodapé, ou menu ⋮ → *Instalar aplicativo*.

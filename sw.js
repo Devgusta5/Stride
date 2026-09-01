@@ -1,4 +1,4 @@
-/* Treino iFuture — service worker
+/* Treino de Entrevistas — service worker
    Troque a versão sempre que editar o index.html: isso força a atualização. */
 const VERSION = "v1";
 const SHELL = "treino-shell-" + VERSION;

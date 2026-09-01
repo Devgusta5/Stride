@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Cronograma de 25 dias de preparacao para o processo seletivo da iFuture: algoritmos, live coding e entrevista tecnica.">
+<meta name="description" content="Cronograma de 25 dias de preparacao para processos seletivos tecnicos: algoritmos, live coding e entrevista tecnica.">
 <meta name="theme-color" content="#0C6D7C" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0A1113" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Treino iFuture">
+<meta name="apple-mobile-web-app-title" content="Treino Entrevistas">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Treino iFuture</title>
+<title>Treino de Entrevistas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -103,7 +103,7 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(-
 }
 .dayrow:hover{background:var(--surface)}
 .dayrow[aria-current="true"]{background:var(--surface);border-color:var(--line-2);box-shadow:var(--shadow)}
-.dayrow .num{font-size:.72rem;color:var(--muted);width:22px;flex:none}
+.dayrow .num{font-size:.72rem;color:var(--muted);width:5ch;flex:none;white-space:nowrap}
 .dayrow .lbl{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dayrow.is-rest .lbl{color:var(--rest)}
 .dot{width:9px;height:9px;border-radius:50%;flex:none;border:1.5px solid var(--line-2);background:transparent}
@@ -234,7 +234,7 @@ textarea::placeholder{color:var(--muted)}
   <header class="top">
     <div class="top-row">
       <div class="brand">
-        <h1>Treino iFuture</h1>
+        <h1>Treino de Entrevistas</h1>
         <p>01/09 → 25/09 · Coderbyte, live coding e entrevista</p>
       </div>
       <div class="top-right">
@@ -506,15 +506,15 @@ const DIAS = [
       {t:"Depois: refazer do zero em 15 min",s:"task"}],
   qs:["Quando travou, o que você disse para não ficar em silêncio?"]},
 
- {d:24,date:"2026-09-24",wd:"quinta",week:4,title:"Simulado final iFuture",kind:"sim",timer:45,
+ {d:24,date:"2026-09-24",wd:"quinta",week:4,title:"Simulado final",kind:"sim",timer:45,
   tag:"Coding 45 min + JavaScript 20 min + Web/Backend 15 min + projetos 10 min + comportamental.",
   ex:[{t:"Bloco 1 — coding, 45 min",u:"https://leetcode.com/problemset/?difficulty=MEDIUM",s:"lc"},
       {t:"Bloco 2 — JavaScript, 20 min",s:"task"},
       {t:"Bloco 3 — Web e Backend, 15 min",s:"task"},
       {t:"Bloco 4 — projetos, 10 min",s:"task"},
-      {t:"Bloco 5 — comportamental: por que a iFuture, onde quer chegar",s:"task"}],
+      {t:"Bloco 5 — comportamental: por que essa vaga, onde quer chegar",s:"task"}],
   qs:["Fale de você em 90 segundos.",
-      "Por que a vaga e por que a iFuture?",
+      "Por que essa vaga e por que essa empresa?",
       "Uma situação em que você errou e o que fez depois."]},
 
  {d:25,date:"2026-09-25",wd:"sexta",week:4,title:"Checkpoint",
@@ -547,7 +547,7 @@ const RECURSOS = [
  {g:"Praticar",items:[
   {t:"LeetCode — Top Interview 150",u:"https://leetcode.com/studyplan/top-interview-150/",d:"Trilha pronta se você quiser problema extra em qualquer dia."},
   {t:"NeetCode 150",u:"https://neetcode.io/practice",d:"Mesmos padrões, agrupados por técnica, com vídeo de solução."},
-  {t:"Coderbyte",u:"https://coderbyte.com/challenges",d:"O formato que a iFuture usa. Faça pelo menos 3 no ambiente real antes do dia 24."},
+  {t:"Coderbyte",u:"https://coderbyte.com/challenges",d:"Formato comum em processos seletivos técnicos. Faça pelo menos 3 no ambiente real antes do dia 24."},
   {t:"Exercism — JavaScript",u:"https://exercism.org/tracks/javascript",d:"Exercícios com mentoria e foco em código idiomático."}]},
  {g:"Referência rápida",items:[
   {t:"Big-O Cheat Sheet",u:"https://www.bigocheatsheet.com/",d:"Complexidade de estruturas e algoritmos numa página."},
@@ -561,7 +561,7 @@ const RECURSOS = [
 ];
 
 /* ---------- estado ---------- */
-const KEY="treino-ifuture-v1";
+const KEY="treino-entrevistas-v1";
 let S={done:{},ex:{},notes:{},chk:{}};
 let saveT=null;
 
@@ -819,7 +819,7 @@ function initPWA(){
     const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
     const a=document.createElement("a");
     a.href=URL.createObjectURL(blob);
-    a.download="treino-ifuture-"+todayIso()+".json";
+    a.download="treino-entrevistas-"+todayIso()+".json";
     a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
     toast("Backup baixado");
   };
