@@ -281,7 +281,7 @@ const LC = s => "https://leetcode.com/problems/" + s + "/";
 const DIAS = [
  {d:1,date:"2026-09-01",wd:"terça",week:1,title:"Arrays + Big O",
   tag:"Reconhecer O(1), O(log n), O(n) e O(n²) olhando para o loop, não decorando tabela.",
-  book:"Cap. 1 — Introdução aos algoritmos",
+  book:"Cap. 1 — Introdução aos algoritmos",prio:"🔴 prioridade altíssima",
   ex:[{t:"Two Sum",u:LC("two-sum"),s:"lc",m:"força bruta primeiro, depois otimize"},
       {t:"Running Sum of 1d Array",u:LC("running-sum-of-1d-array"),s:"lc"},
       {t:"Contains Duplicate",u:LC("contains-duplicate"),s:"lc",m:"compare O(n²) vs Set"},
@@ -294,7 +294,7 @@ const DIAS = [
 
  {d:2,date:"2026-09-02",wd:"quarta",week:1,title:"Hash Map, Object e Set",
   tag:"Entender por que lookup O(1) derruba um O(n²) para O(n).",
-  book:"Cap. 5 — Tabelas hash",
+  book:"Cap. 5 — Tabelas hash",prio:"🔴 prioridade altíssima",
   ex:[{t:"Two Sum (agora com Map)",u:LC("two-sum"),s:"lc",m:"uma passada só"},
       {t:"Valid Anagram",u:LC("valid-anagram"),s:"lc"},
       {t:"Majority Element",u:LC("majority-element"),s:"lc"},
@@ -361,7 +361,7 @@ const DIAS = [
 
  {d:9,date:"2026-09-09",wd:"quarta",week:2,title:"Binary Search",
   tag:"O(log n) na prática: metade do espaço de busca some a cada passo.",
-  book:"Cap. 1 — Busca binária",
+  book:"Cap. 1 — Busca binária",prio:"🔴 prioridade altíssima",
   ex:[{t:"Binary Search",u:LC("binary-search"),s:"lc"},
       {t:"Search Insert Position",u:LC("search-insert-position"),s:"lc"},
       {t:"First Bad Version",u:LC("first-bad-version"),s:"lc"},
@@ -372,7 +372,7 @@ const DIAS = [
 
  {d:10,date:"2026-09-10",wd:"quinta",week:2,title:"Ordenação",
   tag:"Selection sort, quicksort e por que sort() nativo é O(n log n).",
-  book:"Cap. 2 — Ordenação por seleção · Cap. 4 — Quicksort",
+  book:"Cap. 2 — Ordenação por seleção · Cap. 4 — Quicksort",prio:"🟠 prioridade alta",
   ex:[{t:"Sort an Array",u:LC("sort-an-array"),s:"lc",m:"implemente merge/quick na mão"},
       {t:"Sort Colors",u:LC("sort-colors"),s:"lc"},
       {t:"Merge Sorted Array",u:LC("merge-sorted-array"),s:"lc"},
@@ -382,15 +382,17 @@ const DIAS = [
   qs:["Por que [10, 9, 1].sort() devolve [1, 10, 9]?",
       "Quando quicksort degrada para O(n²)?"]},
 
- {d:11,date:"2026-09-11",wd:"sexta",week:2,title:"Problemas mistos",
-  tag:"Sem receber a técnica antes. Você lê o problema e escolhe a estratégia — é isso que a entrevista cobra.",
-  ex:[{t:"Product of Array Except Self",u:LC("product-of-array-except-self"),s:"lc"},
-      {t:"Is Subsequence",u:LC("is-subsequence"),s:"lc"},
-      {t:"Valid Sudoku",u:LC("valid-sudoku"),s:"lc"},
-      {t:"Longest Consecutive Sequence",u:LC("longest-consecutive-sequence"),s:"lc"},
-      {t:"Antes de codar, escrever numa linha qual padrão você escolheu e por quê",s:"task"}],
-  qs:["Que sinal no enunciado te fez escolher esse padrão?",
-      "Existe solução mais simples que a sua, mesmo que mais lenta?"]},
+ {d:11,date:"2026-09-11",wd:"sexta",week:2,title:"Recursão",
+  tag:"Caso base, passo recursivo e confiar que a chamada de dentro funciona.",
+  book:"Cap. 3 — Recursão",prio:"🟠 prioridade alta",
+  ex:[{t:"Fibonacci Number",u:LC("fibonacci-number"),s:"lc",m:"ingênua vs memoizada"},
+      {t:"Climbing Stairs",u:LC("climbing-stairs"),s:"lc"},
+      {t:"Maximum Depth of Binary Tree",u:LC("maximum-depth-of-binary-tree"),s:"lc"},
+      {t:"Invert Binary Tree",u:LC("invert-binary-tree"),s:"lc"},
+      {t:"Subsets",u:LC("subsets"),s:"lc",m:"backtracking"},
+      {t:"Permutations",u:LC("permutations"),s:"lc",m:"backtracking"}],
+  qs:["Qual o custo de espaço de uma recursão de profundidade n?",
+      "O que é stack overflow e como evitar?"]},
 
  {d:12,date:"2026-09-12",wd:"sábado",week:2,title:"Simulado Coderbyte #2",kind:"sim",timer:75,
   tag:"60–75 minutos, e depois responder: por que essa solução, qual a complexidade, quais casos extremos.",
@@ -406,7 +408,7 @@ const DIAS = [
 
  {d:14,date:"2026-09-14",wd:"segunda",week:3,title:"Grafos, BFS e Dijkstra",
   tag:"Grafo é só um objeto de listas de adjacência. BFS é fila.",
-  book:"Caps. 6 e 7 — Busca em largura e Dijkstra",
+  book:"Caps. 6 e 7 — Busca em largura e Dijkstra",prio:"🟡 prioridade média",
   ex:[{t:"Number of Islands",u:LC("number-of-islands"),s:"lc"},
       {t:"Rotting Oranges",u:LC("rotting-oranges"),s:"lc",m:"BFS por níveis"},
       {t:"Clone Graph",u:LC("clone-graph"),s:"lc"},
@@ -415,17 +417,18 @@ const DIAS = [
   qs:["Quando BFS e quando DFS?",
       "Por que BFS acha o menor caminho em grafo sem peso, mas não com peso?"]},
 
- {d:15,date:"2026-09-15",wd:"terça",week:3,title:"Recursão",
-  tag:"Caso base, passo recursivo e confiar que a chamada de dentro funciona.",
-  book:"Cap. 3 — Recursão",
-  ex:[{t:"Fibonacci Number",u:LC("fibonacci-number"),s:"lc",m:"ingênua vs memoizada"},
-      {t:"Climbing Stairs",u:LC("climbing-stairs"),s:"lc"},
-      {t:"Maximum Depth of Binary Tree",u:LC("maximum-depth-of-binary-tree"),s:"lc"},
-      {t:"Invert Binary Tree",u:LC("invert-binary-tree"),s:"lc"},
-      {t:"Subsets",u:LC("subsets"),s:"lc",m:"backtracking"},
-      {t:"Permutations",u:LC("permutations"),s:"lc",m:"backtracking"}],
-  qs:["Qual o custo de espaço de uma recursão de profundidade n?",
-      "O que é stack overflow e como evitar?"]},
+ {d:15,date:"2026-09-15",wd:"terça",week:3,title:"Programação Dinâmica",
+  tag:"Subproblema sobreposto + substrutura ótima. O pulo do gato: definir o estado antes de escrever qualquer código.",
+  book:"Cap. 9 — Programação dinâmica",prio:"🟠 prioridade alta",
+  ex:[{t:"House Robber",u:LC("house-robber"),s:"lc",m:"defina dp[i] antes de codar"},
+      {t:"Coin Change",u:LC("coin-change"),s:"lc"},
+      {t:"Longest Increasing Subsequence",u:LC("longest-increasing-subsequence"),s:"lc"},
+      {t:"Unique Paths",u:LC("unique-paths"),s:"lc",m:"DP em grade — compare com a recursão pura antes"},
+      {t:"Reescrever o Fibonacci do dia 11 com tabulação (bottom-up), sem memoização top-down",s:"task"}],
+  qs:["O que são subproblemas sobrepostos e substrutura ótima?",
+      "Memoização (top-down) vs tabulação (bottom-up): quando cada uma vale mais a pena?",
+      "Como você define o estado (dp[i] ou dp[i][j]) antes de escrever qualquer código?",
+      "Por que resolver por força bruta primeiro ajuda a enxergar a recorrência?"]},
 
  {d:16,date:"2026-09-16",wd:"quarta",week:3,title:"Escolha de estrutura de dados",
   tag:"Treinar a pergunta que resolve metade dos problemas: qual estrutura torna isso fácil?",
@@ -542,7 +545,7 @@ const CHECKLIST = [
 
 const RECURSOS = [
  {g:"Livro-base",items:[
-  {t:"Entendendo Algoritmos (Aditya Bhargava)",u:"https://novatec.com.br/livros/entendendo-algoritmos/",d:"A base teórica do treino. Caps. 1–7 cobrem quase tudo daqui."},
+  {t:"Entendendo Algoritmos (Aditya Bhargava)",u:"https://novatec.com.br/livros/entendendo-algoritmos/",d:"A base teórica do treino. Caps. 1–9 aparecem na trilha, priorizados por peso no processo seletivo — Cap. 8 e 10 ficam em Complementar."},
   {t:"Código do livro em várias linguagens",u:"https://github.com/egonSchiele/grokking_algorithms",d:"Repositório oficial do autor — bom para comparar com a sua versão em JS."}]},
  {g:"Praticar",items:[
   {t:"LeetCode — Top Interview 150",u:"https://leetcode.com/studyplan/top-interview-150/",d:"Trilha pronta se você quiser problema extra em qualquer dia."},
@@ -555,6 +558,10 @@ const RECURSOS = [
   {t:"javascript.info",u:"https://javascript.info/",d:"O melhor material didático de JS moderno."},
   {t:"MDN — HTTP",u:"https://developer.mozilla.org/pt-BR/docs/Web/HTTP",d:"Métodos, status, headers e cache."},
   {t:"Visualgo",u:"https://visualgo.net/en",d:"Ver ordenação, BFS e Dijkstra rodando passo a passo."}]},
+ {g:"Complementar (opcional)",items:[
+  {t:"Algoritmos gulosos — conceito e quando usar",u:"https://en.wikipedia.org/wiki/Greedy_algorithm",d:"Cap. 8 do livro. Prioridade baixa — dá pra entender o conceito sem resolver dezenas de problemas."},
+  {t:"LeetCode — problemas de Greedy",u:"https://leetcode.com/tag/greedy/",d:"Só se sobrar tempo depois do Cap. 9 (DP). Pesa menos no processo seletivo."},
+  {t:"K-vizinhos mais próximos (KNN)",u:"https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm",d:"Cap. 10 do livro. Mais útil pra fechar a leitura completa do que pra Coderbyte/live coding — prioridade baixa."}]},
  {g:"Simular a entrevista",items:[
   {t:"Pramp — entrevista com outra pessoa, de graça",u:"https://www.pramp.com/",d:"Você entrevista e é entrevistado. Pressão real de falar enquanto coda."},
   {t:"Tech Interview Handbook — behavioral",u:"https://www.techinterviewhandbook.org/behavioral-interview/",d:"Como estruturar resposta de comportamental sem enrolar."}]}
@@ -641,7 +648,9 @@ function renderDay(){
   }
   if(d.book){
     h+='<section class="block"><div class="block-title">Livro<span class="rule"></span></div>'+
-       '<div class="book">📖 <span><b>Entendendo Algoritmos</b> — '+esc(d.book)+'</span></div></section>';
+       '<div class="book">📖 <span><b>Entendendo Algoritmos</b> — '+esc(d.book)+
+       (d.prio?' <span style="color:var(--muted);font-weight:600">· '+esc(d.prio)+'</span>':'')+
+       '</span></div></section>';
   }
   if(d.ex&&d.ex.length){
     h+='<section class="block"><div class="block-title">Prática de hoje<span class="rule"></span></div><ul class="ex">';
