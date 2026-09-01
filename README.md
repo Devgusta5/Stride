@@ -74,3 +74,10 @@ Tudo mora no `index.html`:
 
 Depois de editar, **incremente `VERSION` no `sw.js`** (`v1` → `v2`) e publique de novo. Sem
 isso o navegador continua servindo a versão antiga em cache.
+
+### Livro de referência
+
+Os capítulos citados em cada dia (campo `book`) seguem *Entendendo Algoritmos* (Aditya
+Bhargava), que foi o livro disponível na hora de montar essa trilha — não é uma dependência
+do projeto. Para usar outra referência, basta trocar o texto de `book:"..."` em cada dia do
+`DIAS` pelo capítulo/seção correspondente do seu material.
