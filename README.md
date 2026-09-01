@@ -1,4 +1,12 @@
-# treino-dev
+<p align="center">
+  <img src="icons/icon-512.png" width="96" height="96" alt="Ícone do Stride">
+</p>
+
+<h1 align="center">Stride</h1>
+
+<p align="center">
+  <a href="https://stride-devgusta5.vercel.app">stride-devgusta5.vercel.app</a>
+</p>
 
 PWA de acompanhamento de um plano de estudos de 25 dias para preparação técnica de
 processo seletivo: algoritmos, live coding, JavaScript, Web e Backend.
