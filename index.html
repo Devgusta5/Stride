@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Cronograma de 25 dias de preparacao para o processo seletivo da iFuture: algoritmos, live coding e entrevista tecnica.">
+<meta name="theme-color" content="#0C6D7C" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A1113" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treino iFuture">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>Treino iFuture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#F1F5F6; --surface:#FFFFFF; --surface-2:#E7EFF0; --ink:#0F1A1D; --muted:#55686E;
+  --line:#D5E0E2; --line-2:#C2D2D5;
+  --accent:#0C6D7C; --accent-ink:#FFFFFF; --accent-soft:#D6EDF1;
+  --today:#B85C0A; --today-soft:#FAEBD7;
+  --done:#0E7263; --done-soft:#D6EFE9;
+  --rest:#6B7B80;
+  --shadow:0 1px 2px rgba(15,26,29,.06), 0 8px 24px -12px rgba(15,26,29,.18);
+  --radius:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1113; --surface:#111C1F; --surface-2:#17272B; --ink:#E3EDEF; --muted:#8DA4AA;
+    --line:#213840; --line-2:#2C4952;
+    --accent:#54C4D6; --accent-ink:#04252B; --accent-soft:#0D2B32;
+    --today:#F0A44E; --today-soft:#33220E;
+    --done:#4FD0B4; --done-soft:#0C2B27;
+    --rest:#7A8F95;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px -14px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1113; --surface:#111C1F; --surface-2:#17272B; --ink:#E3EDEF; --muted:#8DA4AA;
+  --line:#213840; --line-2:#2C4952;
+  --accent:#54C4D6; --accent-ink:#04252B; --accent-soft:#0D2B32;
+  --today:#F0A44E; --today-soft:#33220E;
+  --done:#4FD0B4; --done-soft:#0C2B27;
+  --rest:#7A8F95;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px -14px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.015em}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.shell{max-width:1180px;margin:0 auto;padding:0 18px 72px}
+header.top{
+  position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin:0 -18px 20px;padding:14px 18px 0;
+}
+.top-row{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.brand h1{font-size:1.32rem;font-weight:800}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.meter{min-width:190px}
+.meter-head{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.bar span{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .35s ease}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.icon-btn:hover{border-color:var(--line-2)}
+nav.tabs{display:flex;gap:2px;margin-top:12px;overflow-x:auto}
+nav.tabs button{
+  padding:9px 14px;font-size:.86rem;font-weight:600;color:var(--muted);white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* ---------- layout ---------- */
+.cols{display:grid;grid-template-columns:250px minmax(0,1fr);gap:26px;align-items:start}
+@media (max-width:860px){.cols{grid-template-columns:1fr;gap:16px}}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:112px;max-height:calc(100vh - 132px);overflow-y:auto;padding-right:4px}
+@media (max-width:860px){.rail{position:static;max-height:none;overflow:visible}}
+.week{margin-bottom:16px}
+.week-title{display:flex;align-items:baseline;gap:8px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.week-title b{color:var(--ink);font-weight:600}
+.week-count{margin-left:auto;font-size:.7rem}
+.dayrow{
+  display:flex;align-items:center;gap:10px;width:100%;padding:7px 9px;border-radius:8px;text-align:left;
+  border:1px solid transparent;
+}
+.dayrow:hover{background:var(--surface)}
+.dayrow[aria-current="true"]{background:var(--surface);border-color:var(--line-2);box-shadow:var(--shadow)}
+.dayrow .num{font-size:.72rem;color:var(--muted);width:22px;flex:none}
+.dayrow .lbl{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dayrow.is-rest .lbl{color:var(--rest)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;border:1.5px solid var(--line-2);background:transparent}
+.dot.done{background:var(--done);border-color:var(--done)}
+.dot.today{border-color:var(--today);background:var(--today);box-shadow:0 0 0 3px var(--today-soft)}
+.dot.sim{border-radius:2px;transform:rotate(45deg)}
+@media (max-width:860px){
+  .rail{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .week{margin:0;flex:none}
+  .week .days{display:flex;gap:6px}
+  .dayrow{flex-direction:column;gap:5px;width:58px;padding:8px 4px;border:1px solid var(--line);background:var(--surface)}
+  .dayrow .lbl{display:none}
+  .dayrow .num{width:auto;font-size:.78rem;color:var(--ink)}
+}
+
+/* ---------- day card ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.day-head{padding:20px 22px 18px;border-bottom:1px solid var(--line);display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.day-head .date{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.day-head h2{font-size:1.55rem;font-weight:700;margin-top:3px}
+.tagline{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;
+  font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  background:var(--surface-2);color:var(--muted);border:1px solid var(--line)
+}
+.pill.sim{background:var(--today-soft);color:var(--today);border-color:transparent}
+.pill.rest{background:transparent}
+.pill.done{background:var(--done-soft);color:var(--done);border-color:transparent}
+.head-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+.btn{
+  padding:9px 15px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);
+  font-weight:600;font-size:.85rem
+}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.07)}
+.day-body{padding:6px 22px 22px}
+section.block{padding:18px 0;border-bottom:1px dashed var(--line)}
+section.block:last-child{border-bottom:none}
+.block-title{display:flex;align-items:center;gap:9px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.block-title .rule{flex:1;height:1px;background:var(--line)}
+.goal{
+  display:flex;gap:12px;padding:13px 15px;border-radius:8px;background:var(--accent-soft);
+  border-left:3px solid var(--accent)
+}
+.goal p{margin:0}
+.goal .k{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:2px}
+.book{display:flex;gap:10px;align-items:baseline;color:var(--muted);font-size:.92rem}
+.book b{color:var(--ink);font-weight:600}
+
+/* exercises */
+ul.ex{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+ul.ex li{display:flex;align-items:flex-start;gap:11px;padding:8px 10px;border-radius:8px}
+ul.ex li:hover{background:var(--surface-2)}
+.cb{
+  appearance:none;width:18px;height:18px;flex:none;margin-top:2px;border-radius:5px;
+  border:1.5px solid var(--line-2);background:var(--surface);cursor:pointer;position:relative
+}
+.cb:checked{background:var(--done);border-color:var(--done)}
+.cb:checked::after{
+  content:"";position:absolute;left:5.5px;top:2px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg)
+}
+.ex-main{min-width:0;flex:1}
+.ex-t{display:block}
+li.checked .ex-t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line-2)}
+.ex-meta{font-size:.74rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:1px}
+.src{font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.src.lc{color:var(--today);background:var(--today-soft);border-color:transparent}
+.src.doc{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+
+/* questions */
+ol.qs{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;color:var(--ink)}
+ol.qs li{padding-left:4px}
+ol.qs li::marker{color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:.8rem}
+
+/* notes */
+textarea{
+  width:100%;min-height:110px;resize:vertical;padding:12px 14px;border-radius:8px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:.92rem
+}
+textarea::placeholder{color:var(--muted)}
+.save-hint{font-size:.74rem;color:var(--muted);margin-top:6px;height:1em}
+
+/* timer */
+.timer{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.clock{font-family:"JetBrains Mono",monospace;font-size:2.6rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.clock.warn{color:var(--today)}
+.clock.over{color:#D64545}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:5px 11px;border-radius:99px;border:1px solid var(--line-2);font-size:.78rem;font-weight:600;background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+
+/* checklist view */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.panel h3{font-size:1.02rem;margin-bottom:4px}
+.panel .sub{color:var(--muted);font-size:.8rem;margin:0 0 12px}
+.tick{display:flex;align-items:center;gap:10px;padding:6px 4px;border-radius:6px}
+.tick:hover{background:var(--surface-2)}
+.tick span{font-size:.92rem}
+.tick.on span{color:var(--muted)}
+.res-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.res-list a{display:block;font-weight:600;text-decoration:none}
+.res-list a:hover{text-decoration:underline}
+.res-list p{margin:1px 0 0;font-size:.82rem;color:var(--muted)}
+.note-strip{margin-top:26px;font-size:.8rem;color:var(--muted);text-align:center}
+.sync{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--line-2);display:block}
+.sync.on i{background:var(--done)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>
+.foot{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:12px}
+.foot-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sync{margin:0}
+.sync.off i{background:var(--today)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);
+  padding:10px 18px;border-radius:99px;font-size:.86rem;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+
+<div class="shell">
+  <header class="top">
+    <div class="top-row">
+      <div class="brand">
+        <h1>Treino iFuture</h1>
+        <p>01/09 → 25/09 · Coderbyte, live coding e entrevista</p>
+      </div>
+      <div class="top-right">
+        <div class="meter">
+          <div class="meter-head"><span>Progresso</span><span class="mono" id="mProg">0/25</span></div>
+          <div class="bar"><span id="mBar" style="width:0%"></span></div>
+        </div>
+        <button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">◐</button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-view="trilha" aria-selected="true">Trilha</button>
+      <button role="tab" data-view="checklist" aria-selected="false">Checklist</button>
+      <button role="tab" data-view="recursos" aria-selected="false">Recursos</button>
+    </nav>
+  </header>
+
+  <div id="viewTrilha">
+    <div class="cols">
+      <aside class="rail" id="rail"></aside>
+      <main id="dayPane"></main>
+    </div>
+  </div>
+
+  <div id="viewChecklist" hidden></div>
+  <div id="viewRecursos" hidden></div>
+
+  <footer class="foot">
+    <div class="foot-actions">
+      <button class="btn primary" id="installBtn" hidden>Instalar app</button>
+      <button class="btn" id="exportBtn">Exportar progresso</button>
+      <button class="btn" id="importBtn">Importar progresso</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+    <p class="sync" id="sync"><i></i><span id="syncTxt">progresso salvo neste dispositivo · funciona offline</span></p>
+  </footer>
+</div>
+
+<script>
+const LC = s => "https://leetcode.com/problems/" + s + "/";
+const DIAS = [
+ {d:1,date:"2026-09-01",wd:"terça",week:1,title:"Arrays + Big O",
+  tag:"Reconhecer O(1), O(log n), O(n) e O(n²) olhando para o loop, não decorando tabela.",
+  book:"Cap. 1 — Introdução aos algoritmos",
+  ex:[{t:"Two Sum",u:LC("two-sum"),s:"lc",m:"força bruta primeiro, depois otimize"},
+      {t:"Running Sum of 1d Array",u:LC("running-sum-of-1d-array"),s:"lc"},
+      {t:"Contains Duplicate",u:LC("contains-duplicate"),s:"lc",m:"compare O(n²) vs Set"},
+      {t:"Best Time to Buy and Sell Stock",u:LC("best-time-to-buy-and-sell-stock"),s:"lc"},
+      {t:"Big-O Cheat Sheet — leitura de 10 min",u:"https://www.bigocheatsheet.com/",s:"doc"},
+      {t:"MDN — Array (métodos e custo)",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array",s:"doc"}],
+  qs:["Qual a complexidade de tempo e de espaço da sua solução?",
+      "Por que dois loops aninhados viram O(n²)?",
+      "O que muda se o array estiver ordenado?"]},
+
+ {d:2,date:"2026-09-02",wd:"quarta",week:1,title:"Hash Map, Object e Set",
+  tag:"Entender por que lookup O(1) derruba um O(n²) para O(n).",
+  book:"Cap. 5 — Tabelas hash",
+  ex:[{t:"Two Sum (agora com Map)",u:LC("two-sum"),s:"lc",m:"uma passada só"},
+      {t:"Valid Anagram",u:LC("valid-anagram"),s:"lc"},
+      {t:"Majority Element",u:LC("majority-element"),s:"lc"},
+      {t:"Group Anagrams",u:LC("group-anagrams"),s:"lc"},
+      {t:"Top K Frequent Elements",u:LC("top-k-frequent-elements"),s:"lc"},
+      {t:"MDN — Map",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Map",s:"doc"},
+      {t:"MDN — Set",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Set",s:"doc"}],
+  qs:["Quando usar Map em vez de objeto literal?",
+      "O que é colisão de hash e como ela afeta a complexidade?",
+      "Qual o custo de memória de trocar tempo por um Map?"]},
+
+ {d:3,date:"2026-09-03",wd:"quinta",week:1,title:"Strings",
+  tag:"Contagem de caracteres, ponteiros e normalização — o feijão com arroz de teste técnico.",
+  ex:[{t:"Valid Anagram",u:LC("valid-anagram"),s:"lc"},
+      {t:"Valid Palindrome",u:LC("valid-palindrome"),s:"lc",m:"cuidado com não alfanuméricos"},
+      {t:"First Unique Character in a String",u:LC("first-unique-character-in-a-string"),s:"lc"},
+      {t:"Ransom Note",u:LC("ransom-note"),s:"lc"},
+      {t:"Longest Common Prefix",u:LC("longest-common-prefix"),s:"lc"},
+      {t:"MDN — String",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/String",s:"doc"}],
+  qs:["Strings em JS são imutáveis — o que isso custa ao concatenar num loop?",
+      "Como você trataria acentos e maiúsculas nesse problema?"]},
+
+ {d:4,date:"2026-09-04",wd:"sexta",week:1,title:"Stack (pilha)",
+  tag:"Push, pop, topo — e o padrão “o que abriu precisa fechar”.",
+  ex:[{t:"Valid Parentheses",u:LC("valid-parentheses"),s:"lc"},
+      {t:"Baseball Game",u:LC("baseball-game"),s:"lc"},
+      {t:"Min Stack",u:LC("min-stack"),s:"lc",m:"getMin em O(1)"},
+      {t:"Implement Queue using Stacks",u:LC("implement-queue-using-stacks"),s:"lc"},
+      {t:"Implementar Stack do zero em JS (array + classe)",s:"task"}],
+  qs:["Diferença entre pilha e fila, e um caso real de cada uma.",
+      "Como a call stack do JS se relaciona com recursão?"]},
+
+ {d:5,date:"2026-09-05",wd:"sábado",week:1,title:"Simulado Coderbyte #1",kind:"sim",timer:60,
+  tag:"2 problemas, 60 minutos, sem olhar solução. Depois: revisar lógica, código, complexidade, bugs e comunicação.",
+  ex:[{t:"Problema 1 — Move Zeroes",u:LC("move-zeroes"),s:"lc"},
+      {t:"Problema 2 — Longest Substring Without Repeating Characters",u:LC("longest-substring-without-repeating-characters"),s:"lc"},
+      {t:"Escrever a complexidade de cada solução antes de conferir",s:"task"},
+      {t:"Gravar-se explicando a solução em voz alta (3 min)",s:"task"}],
+  qs:["Onde você travou e por quê?","Qual caso extremo você deixou passar?"]},
+
+ {d:6,date:"2026-09-06",wd:"domingo",week:1,title:"Descanso ou revisão leve",kind:"rest",
+  tag:"Nada de problema novo. No máximo reler suas anotações da semana.",
+  ex:[{t:"Reler as notas dos dias 1 a 5",s:"task"}]},
+
+ {d:7,date:"2026-09-07",wd:"segunda",week:2,title:"Two Pointers",
+  tag:"Dois índices caminhando pelo array — troca O(n²) por O(n) quando há ordem.",
+  ex:[{t:"Two Sum II — Input Array Is Sorted",u:LC("two-sum-ii-input-array-is-sorted"),s:"lc"},
+      {t:"Reverse String",u:LC("reverse-string"),s:"lc"},
+      {t:"Valid Palindrome",u:LC("valid-palindrome"),s:"lc"},
+      {t:"Move Zeroes",u:LC("move-zeroes"),s:"lc"},
+      {t:"Container With Most Water",u:LC("container-with-most-water"),s:"lc"},
+      {t:"3Sum",u:LC("3sum"),s:"lc",m:"opcional, se sobrar tempo"}],
+  qs:["Que pré-condição o array precisa ter para two pointers funcionar?",
+      "Por que essa técnica é O(n) e não O(n²)?"]},
+
+ {d:8,date:"2026-09-08",wd:"terça",week:2,title:"Sliding Window",
+  tag:"Janela que cresce e encolhe — “maior/menor subarray que satisfaz X”.",
+  ex:[{t:"Longest Substring Without Repeating Characters",u:LC("longest-substring-without-repeating-characters"),s:"lc"},
+      {t:"Maximum Subarray",u:LC("maximum-subarray"),s:"lc",m:"Kadane"},
+      {t:"Minimum Size Subarray Sum",u:LC("minimum-size-subarray-sum"),s:"lc"},
+      {t:"Longest Repeating Character Replacement",u:LC("longest-repeating-character-replacement"),s:"lc"}],
+  qs:["Como você sabe que é janela fixa ou janela variável?",
+      "O que dispara o encolhimento da janela?"]},
+
+ {d:9,date:"2026-09-09",wd:"quarta",week:2,title:"Binary Search",
+  tag:"O(log n) na prática: metade do espaço de busca some a cada passo.",
+  book:"Cap. 1 — Busca binária",
+  ex:[{t:"Binary Search",u:LC("binary-search"),s:"lc"},
+      {t:"Search Insert Position",u:LC("search-insert-position"),s:"lc"},
+      {t:"First Bad Version",u:LC("first-bad-version"),s:"lc"},
+      {t:"Sqrt(x)",u:LC("sqrtx"),s:"lc"},
+      {t:"Find Minimum in Rotated Sorted Array",u:LC("find-minimum-in-rotated-sorted-array"),s:"lc",m:"desafio"}],
+  qs:["Por que (esq + dir) / 2 pode dar problema em outras linguagens?",
+      "Qual a condição de parada do while — < ou <=?"]},
+
+ {d:10,date:"2026-09-10",wd:"quinta",week:2,title:"Ordenação",
+  tag:"Selection sort, quicksort e por que sort() nativo é O(n log n).",
+  book:"Cap. 2 — Ordenação por seleção · Cap. 4 — Quicksort",
+  ex:[{t:"Sort an Array",u:LC("sort-an-array"),s:"lc",m:"implemente merge/quick na mão"},
+      {t:"Sort Colors",u:LC("sort-colors"),s:"lc"},
+      {t:"Merge Sorted Array",u:LC("merge-sorted-array"),s:"lc"},
+      {t:"Kth Largest Element in an Array",u:LC("kth-largest-element-in-an-array"),s:"lc"},
+      {t:"Visualgo — ver os algoritmos rodando",u:"https://visualgo.net/en/sorting",s:"doc"},
+      {t:"MDN — Array.prototype.sort (a pegadinha da ordem lexicográfica)",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort",s:"doc"}],
+  qs:["Por que [10, 9, 1].sort() devolve [1, 10, 9]?",
+      "Quando quicksort degrada para O(n²)?"]},
+
+ {d:11,date:"2026-09-11",wd:"sexta",week:2,title:"Problemas mistos",
+  tag:"Sem receber a técnica antes. Você lê o problema e escolhe a estratégia — é isso que a entrevista cobra.",
+  ex:[{t:"Product of Array Except Self",u:LC("product-of-array-except-self"),s:"lc"},
+      {t:"Is Subsequence",u:LC("is-subsequence"),s:"lc"},
+      {t:"Valid Sudoku",u:LC("valid-sudoku"),s:"lc"},
+      {t:"Longest Consecutive Sequence",u:LC("longest-consecutive-sequence"),s:"lc"},
+      {t:"Antes de codar, escrever numa linha qual padrão você escolheu e por quê",s:"task"}],
+  qs:["Que sinal no enunciado te fez escolher esse padrão?",
+      "Existe solução mais simples que a sua, mesmo que mais lenta?"]},
+
+ {d:12,date:"2026-09-12",wd:"sábado",week:2,title:"Simulado Coderbyte #2",kind:"sim",timer:75,
+  tag:"60–75 minutos, e depois responder: por que essa solução, qual a complexidade, quais casos extremos.",
+  ex:[{t:"Problema 1 — Group Anagrams",u:LC("group-anagrams"),s:"lc"},
+      {t:"Problema 2 — Minimum Size Subarray Sum",u:LC("minimum-size-subarray-sum"),s:"lc"},
+      {t:"Problema 3 (se sobrar tempo) — Product of Array Except Self",u:LC("product-of-array-except-self"),s:"lc"},
+      {t:"Revisão: complexidade, casos extremos e o que travou",s:"task"}],
+  qs:["Se o input fosse 10 milhões de itens, sua solução aguenta?"]},
+
+ {d:13,date:"2026-09-13",wd:"domingo",week:2,title:"Descanso",kind:"rest",
+  tag:"Descanso de verdade. Cérebro consolida padrão dormindo, não empilhando problema.",
+  ex:[]},
+
+ {d:14,date:"2026-09-14",wd:"segunda",week:3,title:"Grafos, BFS e Dijkstra",
+  tag:"Grafo é só um objeto de listas de adjacência. BFS é fila.",
+  book:"Caps. 6 e 7 — Busca em largura e Dijkstra",
+  ex:[{t:"Number of Islands",u:LC("number-of-islands"),s:"lc"},
+      {t:"Rotting Oranges",u:LC("rotting-oranges"),s:"lc",m:"BFS por níveis"},
+      {t:"Clone Graph",u:LC("clone-graph"),s:"lc"},
+      {t:"Course Schedule",u:LC("course-schedule"),s:"lc"},
+      {t:"Network Delay Time",u:LC("network-delay-time"),s:"lc",m:"Dijkstra"}],
+  qs:["Quando BFS e quando DFS?",
+      "Por que BFS acha o menor caminho em grafo sem peso, mas não com peso?"]},
+
+ {d:15,date:"2026-09-15",wd:"terça",week:3,title:"Recursão",
+  tag:"Caso base, passo recursivo e confiar que a chamada de dentro funciona.",
+  book:"Cap. 3 — Recursão",
+  ex:[{t:"Fibonacci Number",u:LC("fibonacci-number"),s:"lc",m:"ingênua vs memoizada"},
+      {t:"Climbing Stairs",u:LC("climbing-stairs"),s:"lc"},
+      {t:"Maximum Depth of Binary Tree",u:LC("maximum-depth-of-binary-tree"),s:"lc"},
+      {t:"Invert Binary Tree",u:LC("invert-binary-tree"),s:"lc"},
+      {t:"Subsets",u:LC("subsets"),s:"lc",m:"backtracking"},
+      {t:"Permutations",u:LC("permutations"),s:"lc",m:"backtracking"}],
+  qs:["Qual o custo de espaço de uma recursão de profundidade n?",
+      "O que é stack overflow e como evitar?"]},
+
+ {d:16,date:"2026-09-16",wd:"quarta",week:3,title:"Escolha de estrutura de dados",
+  tag:"Treinar a pergunta que resolve metade dos problemas: qual estrutura torna isso fácil?",
+  ex:[{t:"Design HashMap",u:LC("design-hashmap"),s:"lc"},
+      {t:"Kth Largest Element in a Stream",u:LC("kth-largest-element-in-a-stream"),s:"lc",m:"heap"},
+      {t:"LRU Cache",u:LC("lru-cache"),s:"lc",m:"Map + ordem de inserção"},
+      {t:"Para 5 problemas antigos, reescrever qual estrutura você usaria hoje",s:"task"}],
+  qs:["Array, Map, Set, pilha, fila ou heap — como você decide?",
+      "Que trade-off de memória essa escolha traz?"]},
+
+ {d:17,date:"2026-09-17",wd:"quinta",week:3,title:"JavaScript a fundo",
+  tag:"Fundamentos e comportamento da linguagem — o que cai em entrevista de JS júnior.",
+  ex:[{t:"MDN — map, filter, reduce e cia.",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array#métodos_de_instância",s:"doc"},
+      {t:"javascript.info — Promises, async/await",u:"https://javascript.info/async",s:"doc"},
+      {t:"javascript.info — Escopo e closures",u:"https://javascript.info/closure",s:"doc"},
+      {t:"MDN — Igualdade, truthy/falsy e coerção",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Equality_comparisons_and_sameness",s:"doc"},
+      {t:"MDN — Event loop",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Event_loop",s:"doc"},
+      {t:"Reescrever 3 loops seus usando map/filter/reduce",s:"task"}],
+  qs:["let, const e var: diferença de escopo e hoisting.",
+      "null vs undefined — quando cada um aparece?",
+      "== vs === com um exemplo que morde.",
+      "O que reduce recebe e devolve?",
+      "async/await é açúcar de quê? O que acontece se você esquecer o await?"]},
+
+ {d:18,date:"2026-09-18",wd:"sexta",week:3,title:"Web e Backend",
+  tag:"HTTP, REST, Node, Express, banco e autenticação — o lado que sustenta o algoritmo.",
+  ex:[{t:"MDN — Métodos HTTP",u:"https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Methods",s:"doc"},
+      {t:"MDN — Códigos de status HTTP",u:"https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status",s:"doc"},
+      {t:"Express — Roteamento e middleware",u:"https://expressjs.com/pt-br/guide/routing.html",s:"doc"},
+      {t:"Node.js — Guia oficial",u:"https://nodejs.org/pt-br/learn",s:"doc"},
+      {t:"JWT — como o token é formado",u:"https://jwt.io/introduction",s:"doc"},
+      {t:"Desenhar no papel a rota POST /login do começo ao fim",s:"task"}],
+  qs:["Diferença entre PUT e PATCH.",
+      "Quando 401 e quando 403?",
+      "O que é middleware no Express e para que você usou um?",
+      "Como você guarda senha no banco?",
+      "SQL ou NoSQL para esse caso — e por quê?"]},
+
+ {d:19,date:"2026-09-19",wd:"sábado",week:3,title:"Entrevista técnica simulada #1",kind:"sim",timer:60,
+  tag:"Bloco completo: algoritmo + JavaScript + Web/Backend + seus projetos.",
+  ex:[{t:"25 min — resolver 1 problema falando em voz alta",u:LC("longest-substring-without-repeating-characters"),s:"lc"},
+      {t:"15 min — perguntas rápidas de JavaScript",s:"task"},
+      {t:"10 min — HTTP, REST e banco",s:"task"},
+      {t:"10 min — apresentar o EtecNotes: problema, stack, decisões",s:"task"}],
+  qs:["Conte um bug difícil que você resolveu e como chegou na causa.",
+      "Por que escolheu essa stack no seu projeto?",
+      "O que você faria diferente hoje?"]},
+
+ {d:20,date:"2026-09-20",wd:"domingo",week:3,title:"Descanso",kind:"rest",
+  tag:"Última semana começa amanhã. Chegue descansado.",ex:[]},
+
+ {d:21,date:"2026-09-21",wd:"segunda",week:4,title:"Live Coding #1",kind:"sim",timer:45,
+  tag:"1 problema. O roteiro importa mais que o código: entender, perguntar, exemplificar, propor, otimizar, analisar, implementar, testar.",
+  ex:[{t:"Problema — Group Anagrams",u:LC("group-anagrams"),s:"lc"},
+      {t:"Repetir em voz alta: “eu faria dessa maneira porque…”",s:"task"},
+      {t:"Testar com array vazio, 1 elemento e repetidos antes de dizer “terminei”",s:"task"}],
+  qs:["Você fez pelo menos 2 perguntas antes de digitar?",
+      "Você deu um exemplo na mão antes de codar?"]},
+
+ {d:22,date:"2026-09-22",wd:"terça",week:4,title:"Entrevista de JavaScript",
+  tag:"Perguntas rápidas, resposta curta e correta. Sem enrolação.",
+  ex:[{t:"javascript.info — Tipos e conversões",u:"https://javascript.info/types",s:"doc"},
+      {t:"MDN — this e arrow functions",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/this",s:"doc"},
+      {t:"Responder as 10 perguntas abaixo em até 1 min cada",s:"task"}],
+  qs:["O que é hoisting?","Diferença entre map e forEach.",
+      "O que é uma closure e onde você usou uma?",
+      "Callback, Promise e async/await: o que mudou entre eles?",
+      "Como funciona o event loop com setTimeout(0)?",
+      "Spread vs rest.","Cópia rasa vs profunda de objeto.",
+      "O que é destructuring e um caso de uso real.",
+      "Para que serve Object.entries?",
+      "try/catch com async/await — onde o erro cai?"]},
+
+ {d:23,date:"2026-09-23",wd:"quarta",week:4,title:"Live Coding #2",kind:"sim",timer:45,
+  tag:"Problema surpresa, 45 minutos, sem ajuda durante a resolução.",
+  ex:[{t:"Sortear um problema Medium que você ainda não fez",u:"https://leetcode.com/problemset/?difficulty=MEDIUM&status=NOT_STARTED",s:"lc"},
+      {t:"Falar o raciocínio do início ao fim, mesmo travado",s:"task"},
+      {t:"Depois: refazer do zero em 15 min",s:"task"}],
+  qs:["Quando travou, o que você disse para não ficar em silêncio?"]},
+
+ {d:24,date:"2026-09-24",wd:"quinta",week:4,title:"Simulado final iFuture",kind:"sim",timer:45,
+  tag:"Coding 45 min + JavaScript 20 min + Web/Backend 15 min + projetos 10 min + comportamental.",
+  ex:[{t:"Bloco 1 — coding, 45 min",u:"https://leetcode.com/problemset/?difficulty=MEDIUM",s:"lc"},
+      {t:"Bloco 2 — JavaScript, 20 min",s:"task"},
+      {t:"Bloco 3 — Web e Backend, 15 min",s:"task"},
+      {t:"Bloco 4 — projetos, 10 min",s:"task"},
+      {t:"Bloco 5 — comportamental: por que a iFuture, onde quer chegar",s:"task"}],
+  qs:["Fale de você em 90 segundos.",
+      "Por que a vaga e por que a iFuture?",
+      "Uma situação em que você errou e o que fez depois."]},
+
+ {d:25,date:"2026-09-25",wd:"sexta",week:4,title:"Checkpoint",
+  tag:"Revisão curta. Nada de estudo pesado — chegar sabendo reconhecer padrão e explicar solução.",
+  ex:[{t:"Reler todas as suas anotações do mês",s:"task"},
+      {t:"Revisar a tabela de complexidades",u:"https://www.bigocheatsheet.com/",s:"doc"},
+      {t:"Reler a regra de ouro do live coding (abaixo)",s:"task"},
+      {t:"Separar 3 histórias de projeto para contar na entrevista",s:"task"}],
+  qs:["Você consegue explicar Big O para alguém que não é da área?"]}
+];
+
+const WEEKS = {
+ 1:{n:"Semana 1",t:"Fundamentos de algoritmos"},
+ 2:{n:"Semana 2",t:"Padrões e estruturas de dados"},
+ 3:{n:"Semana 3",t:"Entrevista técnica"},
+ 4:{n:"Semana 4",t:"Modo processo seletivo"}
+};
+
+const CHECKLIST = [
+ {g:"Algoritmos",sub:"Reconhecer o padrão antes de codar",items:["O(1), O(log n), O(n), O(n log n), O(n²)","Array","Hash Map","Set","Stack","Queue","Linked List","Binary Search","Two Pointers","Sliding Window","BFS","DFS"]},
+ {g:"JavaScript",sub:"Fundamentos e comportamento da linguagem",items:["let / const / var e escopo","Arrays e objetos","Map e Set","map, filter, reduce, forEach, find, some, every","Promises","async / await","Callbacks","Closures","null vs undefined","truthy / falsy e coerção"]},
+ {g:"Web",sub:"O que roda entre o front e a API",items:["HTTP e como uma requisição viaja","GET, POST, PUT, PATCH, DELETE","JSON","REST","Códigos de status","CORS"]},
+ {g:"Backend",sub:"Node no dia a dia",items:["Node.js","Express","Middleware","Rotas","Banco de dados e modelagem","Autenticação e JWT"]}
+];
+
+const RECURSOS = [
+ {g:"Livro-base",items:[
+  {t:"Entendendo Algoritmos (Aditya Bhargava)",u:"https://novatec.com.br/livros/entendendo-algoritmos/",d:"A base teórica do treino. Caps. 1–7 cobrem quase tudo daqui."},
+  {t:"Código do livro em várias linguagens",u:"https://github.com/egonSchiele/grokking_algorithms",d:"Repositório oficial do autor — bom para comparar com a sua versão em JS."}]},
+ {g:"Praticar",items:[
+  {t:"LeetCode — Top Interview 150",u:"https://leetcode.com/studyplan/top-interview-150/",d:"Trilha pronta se você quiser problema extra em qualquer dia."},
+  {t:"NeetCode 150",u:"https://neetcode.io/practice",d:"Mesmos padrões, agrupados por técnica, com vídeo de solução."},
+  {t:"Coderbyte",u:"https://coderbyte.com/challenges",d:"O formato que a iFuture usa. Faça pelo menos 3 no ambiente real antes do dia 24."},
+  {t:"Exercism — JavaScript",u:"https://exercism.org/tracks/javascript",d:"Exercícios com mentoria e foco em código idiomático."}]},
+ {g:"Referência rápida",items:[
+  {t:"Big-O Cheat Sheet",u:"https://www.bigocheatsheet.com/",d:"Complexidade de estruturas e algoritmos numa página."},
+  {t:"MDN — JavaScript",u:"https://developer.mozilla.org/pt-BR/docs/Web/JavaScript",d:"Fonte de verdade da linguagem, em português."},
+  {t:"javascript.info",u:"https://javascript.info/",d:"O melhor material didático de JS moderno."},
+  {t:"MDN — HTTP",u:"https://developer.mozilla.org/pt-BR/docs/Web/HTTP",d:"Métodos, status, headers e cache."},
+  {t:"Visualgo",u:"https://visualgo.net/en",d:"Ver ordenação, BFS e Dijkstra rodando passo a passo."}]},
+ {g:"Simular a entrevista",items:[
+  {t:"Pramp — entrevista com outra pessoa, de graça",u:"https://www.pramp.com/",d:"Você entrevista e é entrevistado. Pressão real de falar enquanto coda."},
+  {t:"Tech Interview Handbook — behavioral",u:"https://www.techinterviewhandbook.org/behavioral-interview/",d:"Como estruturar resposta de comportamental sem enrolar."}]}
+];
+
+/* ---------- estado ---------- */
+const KEY="treino-ifuture-v1";
+let S={done:{},ex:{},notes:{},chk:{}};
+let saveT=null;
+
+function load(){
+  try{const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r));}catch(e){}
+}
+function merge(remote){
+  if(!remote||typeof remote!=="object") return;
+  for(const k of ["done","ex","notes","chk"]){
+    if(remote[k]&&typeof remote[k]==="object") S[k]=Object.assign({},remote[k],S[k]);
+  }
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+}
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDate=iso=>{const[y,m,d]=iso.split("-");return d+"/"+m;};
+function todayIso(){const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");}
+function currentDay(){
+  const t=todayIso();
+  const exact=DIAS.find(d=>d.date===t); if(exact) return exact.d;
+  if(t<DIAS[0].date) return 1;
+  if(t>DIAS[DIAS.length-1].date) return 25;
+  return (DIAS.find(d=>d.date>=t)||DIAS[0]).d;
+}
+let sel=currentDay();
+let view="trilha";
+
+/* ---------- render: rail ---------- */
+function renderRail(){
+  const t=todayIso();
+  let h="";
+  for(const w of [1,2,3,4]){
+    const days=DIAS.filter(d=>d.week===w);
+    const done=days.filter(d=>S.done[d.d]).length;
+    h+='<div class="week"><div class="week-title"><b>'+WEEKS[w].n+'</b> '+esc(WEEKS[w].t)+
+       '<span class="week-count mono">'+done+'/'+days.length+'</span></div><div class="days">';
+    for(const d of days){
+      const isToday=d.date===t;
+      const cls="dot"+(S.done[d.d]?" done":"")+(isToday&&!S.done[d.d]?" today":"")+(d.kind==="sim"?" sim":"");
+      h+='<button class="dayrow'+(d.kind==="rest"?" is-rest":"")+'" data-day="'+d.d+'" aria-current="'+(sel===d.d)+'">'+
+         '<span class="'+cls+'"></span><span class="num mono">'+fmtDate(d.date)+'</span>'+
+         '<span class="lbl">'+esc(d.title)+'</span></button>';
+    }
+    h+='</div></div>';
+  }
+  $("#rail").innerHTML=h;
+}
+
+/* ---------- render: dia ---------- */
+function renderDay(){
+  const d=DIAS.find(x=>x.d===sel), t=todayIso();
+  const isToday=d.date===t, done=!!S.done[d.d];
+  let h='<article class="card"><div class="day-head"><div>';
+  h+='<div class="date mono">Dia '+d.d+' de 25 · '+fmtDate(d.date)+', '+d.wd+'</div>';
+  h+='<h2>'+esc(d.title)+'</h2>';
+  h+='<div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap">';
+  if(isToday) h+='<span class="pill" style="background:var(--today-soft);color:var(--today);border-color:transparent">hoje</span>';
+  if(d.kind==="sim") h+='<span class="pill sim">avaliação</span>';
+  if(d.kind==="rest") h+='<span class="pill rest">descanso</span>';
+  if(done) h+='<span class="pill done">concluído</span>';
+  h+='</div>';
+  if(d.tag) h+='<p class="tagline">'+esc(d.tag)+'</p>';
+  h+='</div><div class="head-actions">';
+  h+='<button class="btn'+(done?"":" primary")+'" id="doneBtn">'+(done?"Desmarcar dia":"Marcar como feito")+'</button>';
+  h+='</div></div><div class="day-body">';
+
+  if(d.timer){
+    h+='<section class="block"><div class="block-title">Cronômetro<span class="rule"></span></div>'+
+       '<div class="timer"><div class="clock" id="clock">'+String(d.timer).padStart(2,"0")+':00</div>'+
+       '<div style="display:flex;gap:8px"><button class="btn primary" id="tStart">Iniciar</button>'+
+       '<button class="btn" id="tReset">Zerar</button></div>'+
+       '<div class="presets" id="presets">'+[45,60,75,20,15,10].map(m=>'<button class="chip" data-min="'+m+'" aria-pressed="'+(m===d.timer)+'">'+m+' min</button>').join("")+'</div>'+
+       '</div></section>';
+  }
+  if(d.book){
+    h+='<section class="block"><div class="block-title">Livro<span class="rule"></span></div>'+
+       '<div class="book">📖 <span><b>Entendendo Algoritmos</b> — '+esc(d.book)+'</span></div></section>';
+  }
+  if(d.ex&&d.ex.length){
+    h+='<section class="block"><div class="block-title">Prática de hoje<span class="rule"></span></div><ul class="ex">';
+    d.ex.forEach((e,i)=>{
+      const k=d.d+":"+i, on=!!S.ex[k];
+      h+='<li class="'+(on?"checked":"")+'"><input type="checkbox" class="cb" data-ex="'+k+'"'+(on?" checked":"")+' aria-label="'+esc(e.t)+'">'+
+         '<span class="ex-main"><span class="ex-t">'+(e.u?'<a href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.t)+'</a>':esc(e.t))+'</span>';
+      const meta=[];
+      if(e.s==="lc") meta.push('<span class="src lc">LeetCode</span>');
+      if(e.s==="doc") meta.push('<span class="src doc">Leitura</span>');
+      if(e.m) meta.push(esc(e.m));
+      if(meta.length) h+='<span class="ex-meta">'+meta.join(" ")+'</span>';
+      h+='</span></li>';
+    });
+    h+='</ul></section>';
+  }
+  if(d.qs&&d.qs.length){
+    h+='<section class="block"><div class="block-title">Responda em voz alta<span class="rule"></span></div><ol class="qs">'+
+       d.qs.map(q=>'<li>'+esc(q)+'</li>').join("")+'</ol></section>';
+  }
+  h+='<section class="block"><div class="block-title">Anotações<span class="rule"></span></div>'+
+     '<textarea id="notes" placeholder="O que travou, o que revisar, a complexidade que você errou...">'+esc(S.notes[d.d]||"")+'</textarea>'+
+     '<div class="save-hint" id="hint"></div></section>';
+  h+='</div></article>';
+
+  if(sel===25||d.kind==="sim"){
+    h+='<div class="panel" style="margin-top:18px"><h3>Regra de ouro do live coding</h3>'+
+       '<p class="sub">Não comece digitando.</p><ol class="qs">'+
+       ['Entender o problema e repetir com suas palavras.','Fazer perguntas sobre entrada, saída e casos extremos.',
+        'Dar um exemplo na mão.','Propor a solução simples primeiro.','Procurar a otimização e dizer por quê.',
+        'Analisar a complexidade em voz alta.','Implementar.','Testar com caso vazio, mínimo e repetido.']
+        .map(s=>'<li>'+s+'</li>').join("")+'</ol>'+
+       '<p style="margin:14px 0 0;color:var(--muted);font-size:.9rem">Frase para treinar: <b style="color:var(--ink)">“Eu faria dessa maneira porque…”</b> — o objetivo é mostrar raciocínio, não código decorado.</p></div>';
+  }
+  $("#dayPane").innerHTML=h;
+  bindDay(d);
+}
+
+/* ---------- timer ---------- */
+let timerId=null, endAt=0, remain=0, running=false, timerMin=0;
+function paintClock(){
+  const el=$("#clock"); if(!el) return;
+  const neg=remain<0, a=Math.abs(remain);
+  const m=Math.floor(a/60), s=a%60;
+  el.textContent=(neg?"-":"")+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  el.className="clock"+(neg?" over":(remain<=60&&running?" warn":""));
+}
+function stopTimer(){running=false;clearInterval(timerId);timerId=null;const b=$("#tStart");if(b)b.textContent="Iniciar";}
+function setTimer(min){stopTimer();timerMin=min;remain=min*60;paintClock();}
+function bindTimer(d){
+  if(!d.timer) return;
+  setTimer(timerMin||d.timer);
+  $("#tStart").onclick=()=>{
+    if(running){stopTimer();return;}
+    running=true;endAt=Date.now()+remain*1000;$("#tStart").textContent="Pausar";
+    timerId=setInterval(()=>{remain=Math.round((endAt-Date.now())/1000);paintClock();},250);
+    paintClock();
+  };
+  $("#tReset").onclick=()=>setTimer(timerMin);
+  $("#presets").querySelectorAll(".chip").forEach(c=>{
+    c.onclick=()=>{
+      setTimer(+c.dataset.min);
+      $("#presets").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===c));
+    };
+  });
+}
+function bindDay(d){
+  $("#doneBtn").onclick=()=>{
+    if(S.done[d.d]) delete S.done[d.d]; else S.done[d.d]=1;
+    save();render();
+  };
+  $("#dayPane").querySelectorAll("[data-ex]").forEach(cb=>{
+    cb.onchange=()=>{
+      const k=cb.dataset.ex;
+      if(cb.checked) S.ex[k]=1; else delete S.ex[k];
+      cb.closest("li").classList.toggle("checked",cb.checked);
+      save();
+    };
+  });
+  const ta=$("#notes"); let nt=null;
+  ta.oninput=()=>{
+    S.notes[d.d]=ta.value;
+    clearTimeout(nt);
+    nt=setTimeout(()=>{save();const hi=$("#hint");hi.textContent="salvo";setTimeout(()=>hi.textContent="",1400);},450);
+  };
+  bindTimer(d);
+}
+
+/* ---------- outras views ---------- */
+function renderChecklist(){
+  let h='<div class="grid2">';
+  for(const g of CHECKLIST){
+    const on=g.items.filter(i=>S.chk[g.g+"|"+i]).length;
+    h+='<div class="panel"><h3>'+esc(g.g)+'</h3><p class="sub">'+esc(g.sub)+' · <span class="mono">'+on+'/'+g.items.length+'</span></p>';
+    for(const i of g.items){
+      const k=g.g+"|"+i, c=!!S.chk[k];
+      h+='<label class="tick'+(c?" on":"")+'"><input type="checkbox" class="cb" data-chk="'+esc(k)+'"'+(c?" checked":"")+'><span>'+esc(i)+'</span></label>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+  const box=$("#viewChecklist"); box.innerHTML=h;
+  box.querySelectorAll("[data-chk]").forEach(cb=>{
+    cb.onchange=()=>{const k=cb.dataset.chk; if(cb.checked)S.chk[k]=1; else delete S.chk[k]; save(); renderChecklist();};
+  });
+}
+function renderRecursos(){
+  let h='<div class="grid2">';
+  for(const g of RECURSOS){
+    h+='<div class="panel"><h3>'+esc(g.g)+'</h3><p class="sub">&nbsp;</p><ul class="res-list">';
+    for(const i of g.items) h+='<li><a href="'+i.u+'" target="_blank" rel="noopener">'+esc(i.t)+'</a><p>'+esc(i.d)+'</p></li>';
+    h+='</ul></div>';
+  }
+  h+='</div>';
+  $("#viewRecursos").innerHTML=h;
+}
+
+/* ---------- render geral ---------- */
+function render(){
+  const n=DIAS.filter(d=>S.done[d.d]).length;
+  $("#mProg").textContent=n+"/25";
+  $("#mBar").style.width=(n/25*100)+"%";
+  $("#viewTrilha").hidden=view!=="trilha";
+  $("#viewChecklist").hidden=view!=="checklist";
+  $("#viewRecursos").hidden=view!=="recursos";
+  if(view==="trilha"){renderRail();renderDay();}
+  if(view==="checklist") renderChecklist();
+  if(view==="recursos") renderRecursos();
+}
+
+document.addEventListener("click",e=>{
+  const row=e.target.closest("[data-day]");
+  if(row){sel=+row.dataset.day;stopTimer();timerMin=0;render();window.scrollTo({top:0,behavior:"smooth"});}
+});
+document.querySelectorAll("nav.tabs button").forEach(b=>{
+  b.onclick=()=>{
+    view=b.dataset.view;
+    document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+    render();
+  };
+});
+$("#themeBtn").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const dark=cur?cur==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+};
+
+
+/* ---------- PWA: service worker, instalação, backup ---------- */
+let deferredPrompt=null;
+function toast(msg){
+  let t=document.querySelector(".toast");
+  if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t);}
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200);
+}
+function netState(){
+  const el=$("#sync"),tx=$("#syncTxt");
+  if(navigator.onLine){el.classList.remove("off");tx.textContent="progresso salvo neste dispositivo · funciona offline";}
+  else{el.classList.add("off");tx.textContent="sem internet — o app continua funcionando";}
+}
+function initPWA(){
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  }
+  window.addEventListener("beforeinstallprompt",e=>{
+    e.preventDefault();deferredPrompt=e;$("#installBtn").hidden=false;
+  });
+  window.addEventListener("appinstalled",()=>{$("#installBtn").hidden=true;toast("App instalado");});
+  $("#installBtn").onclick=async()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("#installBtn").hidden=true;
+  };
+  $("#exportBtn").onclick=()=>{
+    const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="treino-ifuture-"+todayIso()+".json";
+    a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    toast("Backup baixado");
+  };
+  $("#importBtn").onclick=()=>$("#importFile").click();
+  $("#importFile").onchange=async ev=>{
+    const f=ev.target.files[0];if(!f)return;
+    try{
+      const d=JSON.parse(await f.text());
+      for(const k of ["done","ex","notes","chk"]) if(d[k]&&typeof d[k]==="object") S[k]=Object.assign({},S[k],d[k]);
+      save();render();toast("Progresso importado");
+    }catch(e){toast("Arquivo inválido");}
+    ev.target.value="";
+  };
+  addEventListener("online",netState);addEventListener("offline",netState);netState();
+}
+
+load();
+render();
+initPWA();
+</script>
+
+</body>
+</html>

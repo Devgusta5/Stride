@@ -1,0 +1,20 @@
+{
+  "name": "Treino iFuture — preparação 01/09 a 25/09",
+  "short_name": "Treino iFuture",
+  "description": "Cronograma de 25 dias de preparação para o processo seletivo da iFuture: algoritmos, live coding e entrevista técnica.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "/treino-ifuture/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F1F5F6",
+  "theme_color": "#0C6D7C",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
