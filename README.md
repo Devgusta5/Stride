@@ -8,6 +8,12 @@
   <a href="https://stride-devgusta5.vercel.app">stride-devgusta5.vercel.app</a>
 </p>
 
+<p align="center">
+  <img src="icons/qrcode.png" width="160" height="160" alt="QR code para abrir o Stride no celular">
+  <br>
+  <sub>Aponte a câmera para abrir e instalar como app</sub>
+</p>
+
 PWA de acompanhamento de um plano de estudos de 25 dias para preparação técnica de
 processo seletivo: algoritmos, live coding, JavaScript, Web e Backend.
 
@@ -53,6 +59,20 @@ Abra `http://localhost:8080`. Em `localhost` o service worker registra normalmen
 - **Android/Chrome:** botão **Instalar app** no rodapé, ou menu ⋮ → *Instalar aplicativo*.
 - **Desktop (Chrome/Edge):** ícone de instalar na barra de endereço.
 - **iOS/Safari:** Compartilhar → *Adicionar à Tela de Início* (o iOS ignora o prompt automático).
+
+### APK (Android)
+
+Empacotado com o [PWABuilder](https://www.pwabuilder.com/) a partir do manifest do próprio
+site. É um instalável fora da Play Store, então o Android vai pedir permissão de **instalar
+apps de fontes desconhecidas** na primeira vez.
+
+<p align="center">
+  <a href="https://stride-devgusta5.vercel.app/download/stride.apk">
+    <img src="icons/qrcode-apk.png" width="160" height="160" alt="QR code para baixar o APK do Stride">
+  </a>
+  <br>
+  <sub>Baixar <code>stride.apk</code></sub>
+</p>
 
 ## Progresso
 
