@@ -25,8 +25,10 @@
   </tr>
 </table>
 
-PWA de acompanhamento de um plano de estudos de 25 dias para preparação técnica de
-processo seletivo: algoritmos, live coding, JavaScript, Web e Backend.
+PWA de acompanhamento de um plano de 25 dias para preparação de processo seletivo. Duas
+trilhas rodando em paralelo, no mesmo calendário: a **técnica** (algoritmos, live coding,
+JavaScript, Web e Backend) e a de **soft skills** (trajetória, histórias STAR, comportamental
+e comunicação).
 
 Estático, sem build e sem dependências. Funciona offline depois da primeira abertura e pode
 ser instalado no Android, iOS e desktop.
@@ -48,11 +50,22 @@ icons/                  ícones 192, 512 e maskable
 
 - Trilha de N dias, abrindo direto no dia atual
 - Exercícios do dia com link para LeetCode e documentação
+- Bloco de soft skills em todo dia da trilha (10–15 min), com tarefas e perguntas próprias
 - Cronômetro para simulados e live coding (configurável por dia)
 - Anotações por dia, salvas automaticamente
-- Checklist de conhecimentos por tema (ex.: Algoritmos, JavaScript, Web, Backend)
+- Checklist de conhecimentos por tema (ex.: Algoritmos, JavaScript, Web, Backend, Comunicação)
 - Progresso salvo no `localStorage`, com exportar/importar em JSON
 - Tema claro e escuro
+
+Na aba **Soft skills**:
+
+- Pitch de 90 segundos em três campos (presente → passado → futuro), com contagem de palavras,
+  estimativa de tempo de fala e cronômetro de ensaio
+- Banco de 8 histórias no formato STAR (Situação, Tarefa, Ação, Resultado), com marcação de
+  história pronta
+- 39 perguntas comportamentais por categoria, com sorteio aleatório e cronômetro de 2 minutos
+  para treinar sob pressão
+- 12 perguntas para fazer ao entrevistador, para escolher as suas 5
 
 ## Rodar local
 
@@ -88,7 +101,9 @@ do git — ela é necessária pra publicar atualizações do mesmo pacote depois
 
 ## Progresso
 
-Fica no `localStorage`, por dispositivo — não sincroniza sozinho entre celular e PC. Use
+Fica no `localStorage`, por dispositivo — dias e exercícios concluídos, anotações, checklist,
+tarefas de soft skills, texto do pitch e das histórias STAR. Não sincroniza sozinho entre
+celular e PC. Use
 **Exportar progresso** / **Importar progresso** no rodapé para passar de um dispositivo para
 outro. Limpar os dados do site apaga o progresso.
 
@@ -101,6 +116,10 @@ Tudo mora no `index.html`:
   leitura/documentação, `s:"task"` tarefa sem link.
 - `kind:"sim"` marca dia de simulado/avaliação, `kind:"rest"` descanso, `timer: 60` liga o
   cronômetro com N minutos.
+- `SOFT` — o bloco de soft skills de cada dia, indexado pelo número do dia. Mesmo formato de
+  `ex` e `qs` dos dias, mais `s:"rec"` para tarefa de gravar áudio/vídeo.
+- `PITCH`, `STAR`, `STAR_F`, `BEH` e `ASK` — o conteúdo da aba Soft skills: campos do pitch,
+  temas e campos das histórias STAR, perguntas comportamentais e perguntas para o entrevistador.
 - `CHECKLIST` e `RECURSOS` — as outras duas abas do app (temas de estudo e links de referência).
 - `manifest.webmanifest` — nome do app, cores e ícones exibidos ao instalar.
 

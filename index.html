@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Cronograma de 25 dias de preparacao para processos seletivos tecnicos: algoritmos, live coding e entrevista tecnica.">
+<meta name="description" content="Cronograma de 25 dias de preparacao para processos seletivos: algoritmos, live coding, entrevista tecnica e treino comportamental (pitch, historias STAR e perguntas).">
 <meta name="theme-color" content="#0C6D7C" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0A1113" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -225,6 +225,43 @@ textarea::placeholder{color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);
   padding:10px 18px;border-radius:99px;font-size:.86rem;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.show{opacity:1}
+/* ---------- soft skills ---------- */
+.src.rec{color:var(--done);background:var(--done-soft);border-color:transparent}
+.goal.alt{background:var(--today-soft);border-left-color:var(--today)}
+.goal.alt .k{color:var(--today)}
+.goal + ul.ex{margin-top:12px}
+.soft-head{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+.soft-head h2{font-size:1.3rem}
+.soft-head p{margin:4px 0 0;color:var(--muted);font-size:.86rem;max-width:62ch}
+.soft-head .meter{margin-left:auto;min-width:200px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+.field .hint{margin:0 0 6px;font-size:.8rem;color:var(--muted)}
+.field textarea{min-height:74px}
+.wc{margin-top:4px;font-size:.74rem;color:var(--muted);min-height:1em}
+.wc.over{color:var(--today);font-weight:600}
+.star-item{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--bg)}
+.star-sum{display:flex;align-items:center;gap:10px;padding:11px 13px;font-size:.92rem;font-weight:600;cursor:pointer;list-style:none;border-radius:8px}
+.star-sum::-webkit-details-marker{display:none}
+.star-sum:hover{background:var(--surface-2)}
+.star-sum .arrow{color:var(--muted);font-size:.6rem;transition:transform .18s ease}
+.star-item[open] > .star-sum .arrow{transform:rotate(90deg)}
+.star-sum .badge{margin-left:auto;flex:none;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;
+  padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.star-sum .badge.on{background:var(--done-soft);color:var(--done);border-color:transparent}
+.star-body{padding:14px 13px;border-top:1px solid var(--line)}
+.tick.q{align-items:flex-start}
+.tick.q .cb{margin-top:3px}
+.askd{display:block;margin-top:1px;font-size:.8rem;color:var(--muted)}
+.drill{padding:16px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:8px}
+.drill-q{display:flex;align-items:center;min-height:3em;font-size:1rem;font-weight:600;line-height:1.45}
+.drill-q.idle{font-size:.88rem;font-weight:400;color:var(--muted)}
+.drill-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.drill-row .clock{font-size:1.6rem;margin-left:auto}
+.qcat{margin:18px 0 3px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.panel .qcat:first-of-type{margin-top:4px}
 </style>
 </head>
 <body>
@@ -247,6 +284,7 @@ textarea::placeholder{color:var(--muted)}
     </div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-view="trilha" aria-selected="true">Trilha</button>
+      <button role="tab" data-view="soft" aria-selected="false">Soft skills</button>
       <button role="tab" data-view="checklist" aria-selected="false">Checklist</button>
       <button role="tab" data-view="recursos" aria-selected="false">Recursos</button>
     </nav>
@@ -259,6 +297,7 @@ textarea::placeholder{color:var(--muted)}
     </div>
   </div>
 
+  <div id="viewSoft" hidden></div>
   <div id="viewChecklist" hidden></div>
   <div id="viewRecursos" hidden></div>
 
@@ -535,12 +574,297 @@ const WEEKS = {
  3:{n:"Semana 3",t:"Entrevista técnica"},
  4:{n:"Semana 4",t:"Modo processo seletivo"}
 };
+/* ---------- soft skills: bloco diário ----------
+   Mesmo formato de DIAS.ex — {t, u, s, m} — para reaproveitar a lista de tarefas.
+   s:"doc" leitura, s:"rec" gravar áudio/vídeo, s:"task" tarefa sem link. */
+const SOFT = {
+ 1:{t:"Linha do tempo da sua trajetória",
+    tag:"Antes de contar a história, você precisa saber quais são os capítulos. Hoje é só levantar matéria-prima.",
+    ex:[{t:"Escrever 10 marcos seus com tecnologia: primeiro contato, primeiro código que funcionou, curso, primeira frustração, virada de chave",s:"task"},
+        {t:"Marcar os 3 que você contaria numa conversa de 40 minutos",s:"task"},
+        {t:"Para cada um dos 3, escrever em uma linha o que mudou em você depois",s:"task"}],
+    qs:["Como você começou a programar? Responda em 30 segundos — e sem abrir com “desde pequeno eu sempre gostei de computador”."]},
+
+ 2:{t:"Inventário de projetos",
+    tag:"Ninguém contrata pela lista de tecnologias. Contrata pelo problema que você resolveu e pela decisão que você tomou.",
+    ex:[{t:"Listar seus 3 melhores projetos (EtecNotes, Stride e mais um)",s:"task"},
+        {t:"Para cada um: que problema resolve, para quem, qual stack e por que essa",s:"task"},
+        {t:"Para cada um: uma decisão técnica que poderia ter sido diferente",s:"task"},
+        {t:"Para cada um: o que quebrou no meio do caminho",s:"task"}],
+    qs:["Me conta um projeto seu — 2 minutos: problema, solução, decisão, resultado.",
+        "Por que você escolheu essa stack e não outra?"]},
+
+ 3:{t:"Pitch de 90 segundos — escrever",
+    tag:"Presente → passado → futuro. É a única resposta que cai em praticamente toda entrevista.",
+    ex:[{t:"Preencher os três campos do pitch na aba Soft skills",s:"task"},
+        {t:"Tech Interview Handbook — como preparar o “fale sobre você”",u:"https://www.techinterviewhandbook.org/behavioral-interview/",s:"doc"},
+        {t:"Cortar todo adjetivo sem prova: “sou dedicado” sai, “entreguei X sozinho” fica",s:"task"}],
+    qs:["Por que a última frase do seu pitch precisa apontar para a vaga, e não para você?"]},
+
+ 4:{t:"Pitch em voz alta, cronometrado",
+    tag:"Texto bom lido em voz alta costuma virar texto ruim. Hoje você descobre onde trava.",
+    ex:[{t:"Ensaiar o pitch 3 vezes com o cronômetro de 90s da aba Soft skills",s:"task"},
+        {t:"Na terceira vez, sem olhar para o texto",s:"task"},
+        {t:"Gravar o áudio no celular e ouvir uma vez inteira",s:"rec"},
+        {t:"Cortar o trecho que você não conseguiu falar sem tropeçar",s:"task"}],
+    qs:["Você passou dos 90 segundos? O que sai primeiro se precisar cortar 20?"]},
+
+ 5:{t:"Abertura de simulado",
+    tag:"Simulado técnico começa como entrevista de verdade começa: falando.",
+    ex:[{t:"Antes de ligar o cronômetro: falar o pitch de 90s em voz alta, de pé",s:"task"},
+        {t:"Depois do simulado: contar em 1 minuto o que você resolveu, como se explicasse para o entrevistador",s:"task"}],
+    qs:["O que você resolveu hoje e por que resolveu assim?"]},
+
+ 6:{t:"Por que programação",
+    tag:"A pergunta de motivação separa quem decorou resposta de quem tem história.",
+    ex:[{t:"Escrever a resposta de “por que programação” em no máximo 5 linhas",s:"task"},
+        {t:"Trocar cada adjetivo por um fato: em vez de “sou curioso”, o que você fez por curiosidade",s:"task"},
+        {t:"Guia de entrevistas comportamentais para engenheiros (PT-BR)",u:"https://newsletter.nagringa.dev/p/guia-2025-entrevistas-comportamentais",s:"doc"}],
+    qs:["Por que desenvolvimento e não outra área de TI?",
+        "O que você constrói com tecnologia quando ninguém está pedindo?"]},
+
+ 7:{t:"Método STAR",
+    tag:"Situação, Tarefa, Ação, Resultado — o formato que impede você de enrolar quatro minutos e não responder nada.",
+    ex:[{t:"Tech Interview Handbook — STAR e preparação comportamental",u:"https://www.techinterviewhandbook.org/behavioral-interview/",s:"doc"},
+        {t:"Método STAR explicado em português",u:"https://exame.com/carreira/metodo-star-a-formula-gratuita-para-nao-travar-na-pergunta-mais-temida-da-entrevista-de-emprego/",s:"doc"},
+        {t:"Preencher a história “Um bug difícil que eu resolvi” no banco STAR",s:"task"},
+        {t:"Regra da Ação: primeira pessoa do singular. “Eu fiz”, não “a gente fez”",s:"task"}],
+    qs:["Qual foi o resultado? Se você não tem número, qual foi a mudança concreta?"]},
+
+ 8:{t:"História: entrega sob pressão",
+    tag:"Prazo apertado é a situação mais comum de time. O que interessa é o que você negociou.",
+    ex:[{t:"Preencher “Entrega sob pressão” no banco STAR",s:"task"},
+        {t:"Escrever o que você cortou para entregar — e por que aquilo era o certo a cortar",s:"task"},
+        {t:"Contar a história em voz alta em até 2 minutos",s:"task"}],
+    qs:["O que você negociou: escopo, prazo ou qualidade?",
+        "Você avisou alguém antes de o prazo estourar?"]},
+
+ 9:{t:"História: o erro",
+    tag:"Errar não elimina ninguém em processo de júnior. Não saber falar do erro, sim.",
+    ex:[{t:"Preencher “Um erro que eu cometi” no banco STAR",s:"task"},
+        {t:"Terminar a história no que mudou depois: um processo, um hábito, uma checagem",s:"task"},
+        {t:"Reler e apagar qualquer culpa jogada em outra pessoa",s:"task"}],
+    qs:["Conte um erro seu que teve impacto. O que veio depois?",
+        "O que você faz hoje para aquilo não se repetir?"]},
+
+ 10:{t:"História: discordância",
+    tag:"Eles não querem saber se você tem razão. Querem saber se dá para discordar de você sem briga.",
+    ex:[{t:"Preencher “Discordância com alguém” no banco STAR",s:"task"},
+        {t:"Manter o foco no argumento técnico, nunca na pessoa",s:"task"},
+        {t:"Garantir um final: vocês chegaram onde, e o que aconteceu depois",s:"task"}],
+    qs:["Conte uma vez em que você discordou de alguém.",
+        "E se a decisão tivesse ficado contra você — o que você faria?"]},
+
+ 11:{t:"História: aprendi do zero",
+    tag:"Para júnior, velocidade de aprendizado vale mais do que estoque de conhecimento.",
+    ex:[{t:"Preencher “Aprendi algo do zero” no banco STAR",s:"task"},
+        {t:"Descrever o método, não o resultado: por onde começou, o que leu, a quem perguntou",s:"task"},
+        {t:"Ligar a história com a stack da vaga que você quer",s:"task"}],
+    qs:["Como você estuda uma tecnologia nova?",
+        "Quanto tempo até você entregar algo útil com ela?"]},
+
+ 12:{t:"Duas histórias sob cronômetro",
+    tag:"História escrita é uma coisa. História falada com alguém te olhando é outra.",
+    ex:[{t:"Sortear 2 perguntas no drill da aba Soft skills e responder em 2 minutos cada",s:"task"},
+        {t:"Gravar o áudio e ouvir: onde exatamente você enrolou?",s:"rec"},
+        {t:"Reescrever o trecho que ficou confuso",s:"task"}],
+    qs:["Você chegou no Resultado ou parou na Ação?"]},
+
+ 13:{t:"Leitura leve",
+    tag:"Nada de escrever hoje. Só observar como as outras pessoas contam.",
+    ex:[{t:"Coletânea de perguntas comportamentais com respostas de exemplo",u:"https://github.com/ashishps1/awesome-behavioral-interviews",s:"doc"},
+        {t:"Ouvir um podcast ou entrevista com pessoa dev e reparar em como ela estrutura a resposta",s:"task"}],
+    qs:["O que essa pessoa fez ao contar a história que você quer copiar?"]},
+
+ 14:{t:"Pontos fortes com prova",
+    tag:"“Sou proativo” não vale nada. “Fiz X sem ninguém pedir e deu Y” vale.",
+    ex:[{t:"Listar 5 pontos fortes seus",s:"task"},
+        {t:"Ao lado de cada um, um fato de uma linha que prova",s:"task"},
+        {t:"Cortar os que ficaram sem prova",s:"task"}],
+    qs:["Quais são seus pontos fortes?",
+        "Por que devemos te contratar em vez de outro júnior?"]},
+
+ 15:{t:"Ponto fraco honesto",
+    tag:"Fraqueza falsa (“sou perfeccionista demais”) queima na hora. Fraqueza real com plano ganha ponto.",
+    ex:[{t:"Escolher uma fraqueza real que não seja o núcleo da vaga",s:"task"},
+        {t:"Escrever o que você já está fazendo a respeito, com exemplo concreto",s:"task"},
+        {t:"Teste: você contaria isso para um colega sem vergonha?",s:"task"}],
+    qs:["Qual seu maior ponto fraco?",
+        "O que você ainda não sabe fazer e quer aprender nos próximos 6 meses?"]},
+
+ 16:{t:"Time, feedback e pedir ajuda",
+    tag:"Júnior não é contratado por saber tudo. É contratado por ser fácil de trabalhar junto.",
+    ex:[{t:"Preencher “Um feedback duro que eu recebi” no banco STAR",s:"task"},
+        {t:"Preencher “Ajudei alguém / trabalho em equipe” no banco STAR",s:"task"},
+        {t:"Escrever sua regra de quando pedir ajuda (ex.: travei 40 min, então pergunto)",s:"task"}],
+    qs:["Como você reage a um feedback duro?",
+        "Quando você pede ajuda em vez de insistir sozinho?"]},
+
+ 17:{t:"Narrar código em voz alta",
+    tag:"Live coding é prova de comunicação disfarçada de prova de algoritmo.",
+    ex:[{t:"Pegar uma solução sua do dia 1 e explicar em voz alta em 2 min, sem ler o código",s:"task"},
+        {t:"Explicar o mesmo problema para alguém que não é da área",s:"task"},
+        {t:"Trocar jargão por linguagem simples — o que é O(n²) para quem nunca programou?",s:"task"}],
+    qs:["Explique um dos seus projetos para quem não é da área.",
+        "Você consegue explicar Big O sem usar a palavra “complexidade”?"]},
+
+ 18:{t:"Por que essa vaga, por que essa empresa",
+    tag:"Resposta genérica aqui é eliminatória. Isso é pesquisa, não improviso.",
+    ex:[{t:"Ler a descrição da vaga e marcar as 5 palavras que mais se repetem",s:"task"},
+        {t:"Para cada uma, achar algo seu que encaixa de verdade",s:"task"},
+        {t:"Pesquisar a empresa: produto, cliente, tecnologia, notícia recente",s:"task"},
+        {t:"Escrever 3 linhas de “por que essa empresa e não outra”",s:"task"}],
+    qs:["Por que essa vaga?",
+        "O que você sabe sobre o que a gente faz?"]},
+
+ 19:{t:"Bloco comportamental de 15 minutos",
+    tag:"Depois do técnico, sem intervalo — é assim que acontece na entrevista real.",
+    ex:[{t:"15 minutos de perguntas sorteadas no drill, logo após o bloco técnico",s:"task"},
+        {t:"Sem pausar mais de 5 segundos antes de começar a responder",s:"task"},
+        {t:"Anotar as 2 perguntas em que você travou",s:"task"}],
+    qs:["Em qual pergunta você travou hoje? Reescreva a resposta antes de dormir."]},
+
+ 20:{t:"Enxugar as histórias",
+    tag:"Toda história fica melhor 30% menor. Hoje é só corte.",
+    ex:[{t:"Reler as 8 histórias do banco e cortar 30% de cada",s:"task"},
+        {t:"Conferir se toda história termina em Resultado, e não no meio da Ação",s:"task"}],
+    qs:["Se você pudesse contar só uma história na entrevista inteira, qual seria?"]},
+
+ 21:{t:"Falar enquanto coda",
+    tag:"Silêncio de três minutos no live coding conta contra você mesmo que o código saia certo.",
+    ex:[{t:"Narrar em voz alta do começo ao fim — principalmente quando travar",s:"task"},
+        {t:"Ter uma frase de emergência: “deixa eu pensar em voz alta um pouco…”",s:"task"},
+        {t:"Gravar a sessão e contar quantos segundos de silêncio total você teve",s:"rec"}],
+    qs:["O que você disse no momento em que não sabia a resposta?"]},
+
+ 22:{t:"Vícios de fala",
+    tag:"“Tipo”, “né”, “aí”, “meio que”. Todo mundo tem — dá para reduzir bastante em uma semana.",
+    ex:[{t:"Gravar 2 minutos falando sobre um projeto seu",s:"rec"},
+        {t:"Ouvir e contar quantas vezes aparece cada muleta",s:"task"},
+        {t:"Regravar trocando cada muleta por uma pausa em silêncio",s:"rec"}],
+    qs:["Qual é a sua muleta favorita e quantas vezes ela apareceu em 2 minutos?"]},
+
+ 23:{t:"Perguntas para o entrevistador",
+    tag:"“Você tem perguntas para nós?” também é avaliado. Ficar sem pergunta lê-se como falta de interesse.",
+    ex:[{t:"Escolher suas 5 perguntas na aba Soft skills",s:"task"},
+        {t:"Tech Interview Handbook — melhores perguntas para o fim da entrevista",u:"https://www.techinterviewhandbook.org/final-questions/",s:"doc"},
+        {t:"Escrever 1 pergunta específica dessa empresa, que não serviria para nenhuma outra",s:"task"}],
+    qs:["Quais são suas 5 perguntas? Qual delas você faria primeiro?"]},
+
+ 24:{t:"Comportamental completo e salário",
+    tag:"O bloco final do simulado: abertura, histórias, pretensão salarial e fechamento.",
+    ex:[{t:"Abrir com o pitch de 90 segundos",s:"task"},
+        {t:"6 perguntas sorteadas no drill, 2 minutos cada",s:"task"},
+        {t:"Dizer sua pretensão salarial em voz alta, como faixa, sem gaguejar",s:"task"},
+        {t:"Pesquisa salarial de programadores no Brasil",u:"https://pesquisa.codigofonte.com.br/2026",s:"doc"},
+        {t:"Como responder “qual sua pretensão salarial?”",u:"https://www.roberthalf.com/br/pt/insights/pesquisas/resposta-certa-para-qual-sua-pretensao-salarial",s:"doc"},
+        {t:"Fechar fazendo 3 perguntas para o entrevistador",s:"task"}],
+    qs:["Qual sua pretensão salarial?",
+        "Você tem outros processos em andamento?"]},
+
+ 25:{t:"Checkpoint de comunicação",
+    tag:"Nada novo hoje. Só confirmar que já sai da boca sem esforço.",
+    ex:[{t:"Falar o pitch de 90s uma vez, de pé, sem ler",s:"task"},
+        {t:"Escolher as 3 histórias que você conta em qualquer entrevista",s:"task"},
+        {t:"Reler suas 5 perguntas para o entrevistador",s:"task"},
+        {t:"Dormir cedo — voz cansada some no meio da frase",s:"task"}],
+    qs:["Fale de você em 90 segundos.",
+        "Se der tempo de uma história só, qual é?"]}
+};
+
+/* ---------- soft skills: aba ---------- */
+const PITCH = [
+ ["p1","Presente","Quem você é agora, em uma frase: o que estuda, o que constrói, com que stack."],
+ ["p2","Passado","Dois ou três momentos que explicam como você chegou aqui. Highlight, não currículo inteiro."],
+ ["p3","Futuro","Onde quer chegar e por que essa vaga é o próximo passo. Termine apontando para a empresa."]
+];
+
+const STAR = [
+ {k:"bug",   t:"Um bug difícil que eu resolvi",        h:"O mais pedido em vaga técnica. Mostra método de investigação."},
+ {k:"prazo", t:"Entrega sob pressão / prazo apertado", h:"O que interessa é o que você cortou e por quê."},
+ {k:"erro",  t:"Um erro que eu cometi",                h:"Termine no que mudou depois. Sem culpar terceiros."},
+ {k:"conf",  t:"Discordância com alguém",              h:"Argumento técnico, não briga. Precisa ter um desfecho."},
+ {k:"novo",  t:"Aprendi algo do zero",                 h:"O método importa mais que o resultado."},
+ {k:"time",  t:"Ajudei alguém / trabalho em equipe",   h:"Como você aparece quando o problema não é seu."},
+ {k:"orgu",  t:"O projeto do qual eu me orgulho",      h:"Problema, decisão, resultado — não a lista de tecnologias."},
+ {k:"fb",    t:"Um feedback duro que eu recebi",       h:"O que você fez nos sete dias seguintes."}
+];
+const STAR_F = [
+ ["s","Situação","Onde, quando, qual era o contexto. Duas frases bastam."],
+ ["t","Tarefa","O que precisava ser resolvido e por que sobrou para você."],
+ ["a","Ação","O que VOCÊ fez, passo a passo. Primeira pessoa do singular."],
+ ["r","Resultado","O que mudou. Número se houver; se não, o efeito concreto."]
+];
+
+const BEH = [
+ {g:"Trajetória e motivação",items:[
+  "Fale de você em 90 segundos.",
+  "Como você começou a programar?",
+  "Por que desenvolvimento e não outra área de TI?",
+  "O que te fez escolher essa stack?",
+  "Onde você quer estar daqui a dois anos?",
+  "Por que essa vaga?",
+  "Por que essa empresa, e não outra?",
+  "O que você busca no seu primeiro emprego na área?"]},
+ {g:"Projetos e decisões",items:[
+  "Me conte sobre o projeto que você mais gostou de fazer.",
+  "Qual foi a decisão técnica mais difícil desse projeto?",
+  "O que você faria diferente se recomeçasse hoje?",
+  "Conte um bug difícil e como você chegou na causa.",
+  "Como você estuda uma tecnologia nova?",
+  "Como você sabe que o seu código está bom?",
+  "Você já jogou fora um código que tinha escrito? Por quê?",
+  "Explique um dos seus projetos para quem não é da área."]},
+ {g:"Time e comportamento",items:[
+  "Conte uma vez em que você discordou de alguém. Como terminou?",
+  "Como você reage a um feedback duro?",
+  "Conte uma vez em que você pediu ajuda.",
+  "Como é trabalhar com alguém muito mais experiente que você?",
+  "Conte uma vez em que você ajudou um colega.",
+  "Como você lida com uma tarefa mal definida?",
+  "Já pegou um prazo que não dava? O que você fez?",
+  "Como você prioriza quando tudo é urgente?",
+  "Conte uma vez em que você tomou iniciativa sem ninguém pedir.",
+  "O que te desmotiva dentro de um time?"]},
+ {g:"Erros e limites",items:[
+  "Conte um erro seu que teve impacto. O que veio depois?",
+  "Qual é o seu maior ponto fraco?",
+  "O que você ainda não sabe fazer e quer aprender?",
+  "Você já subiu algo com bug para produção?",
+  "O que você faz quando trava num problema por horas?",
+  "Como você reage quando não sabe a resposta numa entrevista?",
+  "Conte algo que você tentou e não deu certo."]},
+ {g:"Fechamento",items:[
+  "Quais são seus pontos fortes? Prove com um exemplo.",
+  "Por que devemos te contratar?",
+  "Qual é a sua pretensão salarial?",
+  "Você tem outros processos em andamento?",
+  "A partir de quando você teria disponibilidade?",
+  "Você tem perguntas para nós?"]}
+];
+
+const ASK = [
+ {q:"Como é o dia a dia de quem está nessa vaga?",d:"Abre a conversa e revela se a rotina bate com o que foi anunciado."},
+ {q:"Como uma pessoa júnior é acompanhada nos primeiros três meses?",d:"Existe onboarding e mentoria, ou você vai ser jogado na piscina?"},
+ {q:"Quem revisa meu código e como funciona o code review de vocês?",d:"Melhor sinal isolado de maturidade técnica de um time."},
+ {q:"Qual é a stack real do time hoje, além da que está na vaga?",d:"Descobre o legado que ninguém anuncia."},
+ {q:"Como vocês medem que alguém está indo bem nessa posição?",d:"Você passa a saber exatamente o que perseguir."},
+ {q:"Qual é o maior desafio do time neste momento?",d:"Mostra interesse no problema, não só no cargo."},
+ {q:"Com que frequência sobe código para produção e como é o deploy?",d:"Revela o nível de automação e a dor do time."},
+ {q:"Tem alguma dívida técnica que incomoda vocês hoje?",d:"Pergunta madura — e a resposta diz muito sobre a cultura."},
+ {q:"Como o time reage quando um prazo aperta?",d:"Testa se “trabalhamos sob pressão” significa hora extra."},
+ {q:"Tem espaço para estudar dentro do expediente?",d:"Importa muito no primeiro emprego."},
+ {q:"O que você mais gosta de trabalhar aqui?",d:"Humaniza a conversa e costuma render a resposta mais sincera do dia."},
+ {q:"Qual é o próximo passo do processo e em quanto tempo tenho retorno?",d:"Fecha a entrevista com clareza. Sempre faça essa."}
+];
 
 const CHECKLIST = [
  {g:"Algoritmos",sub:"Reconhecer o padrão antes de codar",items:["O(1), O(log n), O(n), O(n log n), O(n²)","Array","Hash Map","Set","Stack","Queue","Linked List","Binary Search","Two Pointers","Sliding Window","BFS","DFS"]},
  {g:"JavaScript",sub:"Fundamentos e comportamento da linguagem",items:["let / const / var e escopo","Arrays e objetos","Map e Set","map, filter, reduce, forEach, find, some, every","Promises","async / await","Callbacks","Closures","null vs undefined","truthy / falsy e coerção"]},
  {g:"Web",sub:"O que roda entre o front e a API",items:["HTTP e como uma requisição viaja","GET, POST, PUT, PATCH, DELETE","JSON","REST","Códigos de status","CORS"]},
- {g:"Backend",sub:"Node no dia a dia",items:["Node.js","Express","Middleware","Rotas","Banco de dados e modelagem","Autenticação e JWT"]}
+ {g:"Backend",sub:"Node no dia a dia",items:["Node.js","Express","Middleware","Rotas","Banco de dados e modelagem","Autenticação e JWT"]},
+ {g:"Trajetória",sub:"O que você precisa saber contar sobre você",items:["Linha do tempo com 10 marcos","Como comecei a programar, em 30s","Por que programação e não outra área","3 projetos: problema, stack, decisão","Por que essa vaga — resposta específica","Ponto forte com prova","Ponto fraco com plano","Onde quero estar em 2 anos","Pretensão salarial em faixa"]},
+ {g:"Comunicação",sub:"Como a resposta sai da boca",items:["Pitch de 90s cronometrado","8 histórias STAR escritas","Contar uma história em até 2 min","Falar o raciocínio enquanto coda","Dizer “não sei, mas eu faria assim”","Perguntar antes de começar a codar","Cortar “tipo”, “né”, “aí”, “meio que”","Pausar em silêncio em vez de “éééé”","Explicar um projeto sem jargão","5 perguntas para o entrevistador"]}
 ];
 
 const RECURSOS = [
@@ -564,20 +888,32 @@ const RECURSOS = [
   {t:"K-vizinhos mais próximos (KNN)",u:"https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm",d:"Cap. 10 do livro. Mais útil pra fechar a leitura completa do que pra Coderbyte/live coding — prioridade baixa."}]},
  {g:"Simular a entrevista",items:[
   {t:"Pramp — entrevista com outra pessoa, de graça",u:"https://www.pramp.com/",d:"Você entrevista e é entrevistado. Pressão real de falar enquanto coda."},
-  {t:"Tech Interview Handbook — behavioral",u:"https://www.techinterviewhandbook.org/behavioral-interview/",d:"Como estruturar resposta de comportamental sem enrolar."}]}
+  {t:"Tech Interview Handbook — behavioral",u:"https://www.techinterviewhandbook.org/behavioral-interview/",d:"Como estruturar resposta de comportamental sem enrolar."}]},
+ {g:"Comportamental",items:[
+  {t:"Tech Interview Handbook — as 30 perguntas mais comuns",u:"https://www.techinterviewhandbook.org/behavioral-interview-questions/",d:"A lista de referência. Quem responde essas 30 responde quase tudo."},
+  {t:"awesome-behavioral-interviews",u:"https://github.com/ashishps1/awesome-behavioral-interviews",d:"Repositório com perguntas, respostas de exemplo e o que o avaliador procura em cada uma."},
+  {t:"Guia de entrevistas comportamentais para engenheiros",u:"https://newsletter.nagringa.dev/p/guia-2025-entrevistas-comportamentais",d:"Em português e escrito para dev, não para processo genérico de RH."},
+  {t:"Método STAR, em português",u:"https://exame.com/carreira/metodo-star-a-formula-gratuita-para-nao-travar-na-pergunta-mais-temida-da-entrevista-de-emprego/",d:"Leitura de 5 minutos para fixar Situação, Tarefa, Ação e Resultado."},
+  {t:"Amazon — Leadership Principles",u:"https://www.amazon.jobs/en/principles",d:"Mesmo sem mirar a Amazon: é o vocabulário que boa parte das empresas usa para avaliar comportamento."},
+  {t:"Perguntas para fazer no fim da entrevista",u:"https://www.techinterviewhandbook.org/final-questions/",d:"Para não travar no “você tem perguntas para nós?”."}]},
+ {g:"Salário e negociação",items:[
+  {t:"Pesquisa Salarial de Programadores (Código Fonte TV)",u:"https://pesquisa.codigofonte.com.br/2026",d:"Números do mercado brasileiro por nível, stack e região — base para montar a sua faixa."},
+  {t:"Como responder “qual sua pretensão salarial?”",u:"https://www.roberthalf.com/br/pt/insights/pesquisas/resposta-certa-para-qual-sua-pretensao-salarial",d:"Dê faixa, nunca número seco. E saiba o piso que você aceita antes de entrar na call."}]}
 ];
 
 /* ---------- estado ---------- */
 const KEY="treino-entrevistas-v1";
-let S={done:{},ex:{},notes:{},chk:{}};
+const KEYS=["done","ex","notes","chk","soft","pitch","star","beh","ask"];
+let S={done:{},ex:{},notes:{},chk:{},soft:{},pitch:{},star:{},beh:{},ask:{}};
 let saveT=null;
+function lazySave(){clearTimeout(saveT);saveT=setTimeout(save,450);}
 
 function load(){
   try{const r=localStorage.getItem(KEY); if(r) S=Object.assign(S,JSON.parse(r));}catch(e){}
 }
 function merge(remote){
   if(!remote||typeof remote!=="object") return;
-  for(const k of ["done","ex","notes","chk"]){
+  for(const k of KEYS){
     if(remote[k]&&typeof remote[k]==="object") S[k]=Object.assign({},remote[k],S[k]);
   }
 }
@@ -620,6 +956,25 @@ function renderRail(){
   $("#rail").innerHTML=h;
 }
 
+/* Lista de tarefas com checkbox — usada pela prática técnica e pelo bloco de soft skills.
+   attr: "ex" ou "soft"; bag: o objeto de estado correspondente. */
+function listHtml(items,attr,pre,bag){
+  let h='<ul class="ex">';
+  items.forEach((e,i)=>{
+    const k=pre+":"+i, on=!!bag[k];
+    h+='<li class="'+(on?"checked":"")+'"><input type="checkbox" class="cb" data-'+attr+'="'+k+'"'+(on?" checked":"")+' aria-label="'+esc(e.t)+'">'+
+       '<span class="ex-main"><span class="ex-t">'+(e.u?'<a href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.t)+'</a>':esc(e.t))+'</span>';
+    const meta=[];
+    if(e.s==="lc") meta.push('<span class="src lc">LeetCode</span>');
+    if(e.s==="doc") meta.push('<span class="src doc">Leitura</span>');
+    if(e.s==="rec") meta.push('<span class="src rec">Gravar</span>');
+    if(e.m) meta.push(esc(e.m));
+    if(meta.length) h+='<span class="ex-meta">'+meta.join(" ")+'</span>';
+    h+='</span></li>';
+  });
+  return h+'</ul>';
+}
+
 /* ---------- render: dia ---------- */
 function renderDay(){
   const d=DIAS.find(x=>x.d===sel), t=todayIso();
@@ -653,23 +1008,20 @@ function renderDay(){
        '</span></div></section>';
   }
   if(d.ex&&d.ex.length){
-    h+='<section class="block"><div class="block-title">Prática de hoje<span class="rule"></span></div><ul class="ex">';
-    d.ex.forEach((e,i)=>{
-      const k=d.d+":"+i, on=!!S.ex[k];
-      h+='<li class="'+(on?"checked":"")+'"><input type="checkbox" class="cb" data-ex="'+k+'"'+(on?" checked":"")+' aria-label="'+esc(e.t)+'">'+
-         '<span class="ex-main"><span class="ex-t">'+(e.u?'<a href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.t)+'</a>':esc(e.t))+'</span>';
-      const meta=[];
-      if(e.s==="lc") meta.push('<span class="src lc">LeetCode</span>');
-      if(e.s==="doc") meta.push('<span class="src doc">Leitura</span>');
-      if(e.m) meta.push(esc(e.m));
-      if(meta.length) h+='<span class="ex-meta">'+meta.join(" ")+'</span>';
-      h+='</span></li>';
-    });
-    h+='</ul></section>';
+    h+='<section class="block"><div class="block-title">Prática de hoje<span class="rule"></span></div>'+
+       listHtml(d.ex,"ex",d.d,S.ex)+'</section>';
   }
   if(d.qs&&d.qs.length){
     h+='<section class="block"><div class="block-title">Responda em voz alta<span class="rule"></span></div><ol class="qs">'+
        d.qs.map(q=>'<li>'+esc(q)+'</li>').join("")+'</ol></section>';
+  }
+  const sf=SOFT[d.d];
+  if(sf){
+    h+='<section class="block"><div class="block-title">Soft skills do dia<span class="rule"></span></div>'+
+       '<div class="goal alt"><span aria-hidden="true">🗣</span><div><p class="k">'+esc(sf.t)+'</p><p>'+esc(sf.tag)+'</p></div></div>';
+    if(sf.ex&&sf.ex.length) h+=listHtml(sf.ex,"soft",d.d,S.soft);
+    if(sf.qs&&sf.qs.length) h+='<ol class="qs" style="margin-top:14px">'+sf.qs.map(q=>'<li>'+esc(q)+'</li>').join("")+'</ol>';
+    h+='</section>';
   }
   h+='<section class="block"><div class="block-title">Anotações<span class="rule"></span></div>'+
      '<textarea id="notes" placeholder="O que travou, o que revisar, a complexidade que você errou...">'+esc(S.notes[d.d]||"")+'</textarea>'+
@@ -722,10 +1074,11 @@ function bindDay(d){
     if(S.done[d.d]) delete S.done[d.d]; else S.done[d.d]=1;
     save();render();
   };
-  $("#dayPane").querySelectorAll("[data-ex]").forEach(cb=>{
+  $("#dayPane").querySelectorAll("[data-ex],[data-soft]").forEach(cb=>{
+    const soft="soft" in cb.dataset;
+    const bag=soft?S.soft:S.ex, k=soft?cb.dataset.soft:cb.dataset.ex;
     cb.onchange=()=>{
-      const k=cb.dataset.ex;
-      if(cb.checked) S.ex[k]=1; else delete S.ex[k];
+      if(cb.checked) bag[k]=1; else delete bag[k];
       cb.closest("li").classList.toggle("checked",cb.checked);
       save();
     };
@@ -768,15 +1121,183 @@ function renderRecursos(){
   $("#viewRecursos").innerHTML=h;
 }
 
+/* ---------- render: soft skills ---------- */
+const ALL_BEH = BEH.reduce((a,g)=>a.concat(g.items),[]);
+
+function softKeys(n){const s=SOFT[n];return s&&s.ex?s.ex.map((_,i)=>n+":"+i):[];}
+function softDayDone(n){const k=softKeys(n);return k.length>0&&k.every(x=>S.soft[x]);}
+function softCount(){return Object.keys(SOFT).filter(n=>softDayDone(+n)).length;}
+function words(s){return (String(s||"").trim().match(/\S+/g)||[]).length;}
+function starFilled(k){const v=S.star[k]||{};return STAR_F.filter(f=>(v[f[0]]||"").trim()).length;}
+
+/* cronômetro genérico — usado pelo ensaio do pitch e pelo drill */
+function makeTimer(clockSel,btnSel,secs,label){
+  let id=null,rem=secs,run=false;
+  const paint=()=>{
+    const el=$(clockSel); if(!el) return;
+    const neg=rem<0,a=Math.abs(rem);
+    el.textContent=(neg?"-":"")+String(Math.floor(a/60)).padStart(2,"0")+":"+String(a%60).padStart(2,"0");
+    el.className="clock"+(neg?" over":(rem<=20&&run?" warn":""));
+  };
+  const stop=()=>{run=false;clearInterval(id);id=null;const b=$(btnSel);if(b)b.textContent=label;};
+  const reset=()=>{stop();rem=secs;paint();};
+  const toggle=()=>{
+    if(run){stop();return;}
+    run=true;const end=Date.now()+rem*1000;const b=$(btnSel);if(b)b.textContent="Pausar";
+    id=setInterval(()=>{rem=Math.round((end-Date.now())/1000);paint();},250);
+    paint();
+  };
+  return {paint,stop,reset,toggle};
+}
+let pitchT=null,drillT=null;
+function stopSoftTimers(){if(pitchT)pitchT.stop();if(drillT)drillT.stop();}
+
+function pitchWc(){
+  const el=$("#pitchWc"); if(!el) return;
+  const n=PITCH.reduce((a,p)=>a+words(S.pitch[p[0]]),0);
+  const sec=Math.round(n/140*60);           /* ~140 palavras por minuto falando */
+  el.textContent=n?n+" palavras · ≈ "+sec+"s falando em ritmo normal":"Meta: 180 a 220 palavras — cerca de 90 segundos.";
+  el.className="wc"+(sec>95?" over":"");
+}
+
+function renderSoft(){
+  stopSoftTimers();
+  const feitos=softCount();
+  let h='<div class="soft-head"><div><h2>Soft skills</h2>'+
+    '<p>A trilha técnica prova que você resolve o problema. Esta prova que dá para trabalhar com você — e é aqui que a maioria dos processos de júnior é decidida.</p></div>'+
+    '<div class="meter"><div class="meter-head"><span>Blocos diários</span><span class="mono">'+feitos+'/25</span></div>'+
+    '<div class="bar"><span style="width:'+(feitos/25*100)+'%"></span></div></div></div><div class="stack">';
+
+  /* pitch */
+  h+='<div class="panel"><h3>Pitch de 90 segundos</h3>'+
+     '<p class="sub">Presente → passado → futuro. Escreva falando: leia cada frase em voz alta antes de passar para a próxima.</p>';
+  for(const [k,lab,hint] of PITCH){
+    h+='<div class="field"><label for="pi-'+k+'">'+esc(lab)+'</label><p class="hint">'+esc(hint)+'</p>'+
+       '<textarea id="pi-'+k+'" data-pitch="'+k+'">'+esc(S.pitch[k]||"")+'</textarea></div>';
+  }
+  h+='<div class="wc" id="pitchWc"></div>'+
+     '<div class="drill-row"><button class="btn primary" id="pStart">Ensaiar 90s</button>'+
+     '<button class="btn" id="pReset">Zerar</button><div class="clock" id="pClock">01:30</div></div></div>';
+
+  /* banco de histórias */
+  const prontas=STAR.filter(s=>starFilled(s.k)===STAR_F.length).length;
+  h+='<div class="panel"><h3>Banco de histórias (STAR)</h3>'+
+     '<p class="sub">Oito histórias cobrem quase toda pergunta comportamental. '+
+     '<span class="mono">'+prontas+'/'+STAR.length+'</span> prontas.</p>';
+  for(const s of STAR){
+    const n=starFilled(s.k),full=n===STAR_F.length,v=S.star[s.k]||{};
+    h+='<details class="star-item" data-star="'+s.k+'"><summary class="star-sum"><span class="arrow">▶</span>'+
+       '<span>'+esc(s.t)+'</span><span class="badge'+(full?" on":"")+'">'+(full?"pronta":n+"/"+STAR_F.length)+'</span></summary>'+
+       '<div class="star-body"><p class="hint" style="margin:0 0 12px;font-size:.82rem;color:var(--muted)">'+esc(s.h)+'</p>';
+    for(const [f,lab,hint] of STAR_F){
+      h+='<div class="field"><label for="st-'+s.k+'-'+f+'">'+esc(lab)+'</label><p class="hint">'+esc(hint)+'</p>'+
+         '<textarea id="st-'+s.k+'-'+f+'" data-star-f="'+s.k+'|'+f+'">'+esc(v[f]||"")+'</textarea></div>';
+    }
+    h+='</div></details>';
+  }
+  h+='</div>';
+
+  h+='<div class="grid2">';
+
+  /* perguntas + drill */
+  h+='<div class="panel"><h3>Perguntas comportamentais</h3>'+
+     '<p class="sub">'+ALL_BEH.length+' perguntas. Marque só as que você já respondeu em voz alta, inteiras, sem reler nada.</p>'+
+     '<div class="drill"><div class="drill-q idle" id="drillQ">Sorteie uma pergunta, comece a falar em até 5 segundos e não passe de 2 minutos.</div>'+
+     '<div class="drill-row"><button class="btn primary" id="dNew">Sortear</button>'+
+     '<button class="btn" id="dStart">Iniciar 2 min</button><div class="clock" id="dClock">02:00</div></div></div>';
+  for(const g of BEH){
+    const on=g.items.filter(i=>S.beh[g.g+"|"+i]).length;
+    h+='<p class="qcat">'+esc(g.g)+' <span class="mono">'+on+'/'+g.items.length+'</span></p>';
+    for(const i of g.items){
+      const k=g.g+"|"+i,c=!!S.beh[k];
+      h+='<label class="tick q'+(c?" on":"")+'"><input type="checkbox" class="cb" data-beh="'+esc(k)+'"'+(c?" checked":"")+'><span>'+esc(i)+'</span></label>';
+    }
+  }
+  h+='</div>';
+
+  /* coluna direita */
+  const escolhidas=ASK.filter(a=>S.ask[a.q]).length;
+  h+='<div class="stack"><div class="panel"><h3>Perguntas para o entrevistador</h3>'+
+     '<p class="sub">Escolha 5 e leve anotadas. <span class="mono">'+escolhidas+'/5</span> escolhidas.</p>';
+  for(const a of ASK){
+    const c=!!S.ask[a.q];
+    h+='<label class="tick q'+(c?" on":"")+'"><input type="checkbox" class="cb" data-ask="'+esc(a.q)+'"'+(c?" checked":"")+'>'+
+       '<span>'+esc(a.q)+'<span class="askd">'+esc(a.d)+'</span></span></label>';
+  }
+  h+='</div>';
+
+  h+='<div class="panel"><h3>Regra de ouro da resposta comportamental</h3>'+
+     '<p class="sub">Para quando a pergunta pegar você de surpresa.</p><ol class="qs">'+
+     ["Repita a pergunta com suas palavras — ganha 3 segundos e evita responder outra coisa.",
+      "Escolha uma história do banco. Uma só, não três pela metade.",
+      "Situação e Tarefa em duas frases. Contexto longo mata a resposta.",
+      "Ação em primeira pessoa do singular: o que VOCÊ fez.",
+      "Feche no Resultado, sempre. Sem resultado não é história, é desabafo.",
+      "Dois minutos. Se passou disso, o corte começa pela Situação.",
+      "Nunca passou por isso? “Nunca aconteceu comigo, mas eu faria assim…” é resposta válida.",
+      "Não fale mal de professor, colega ou empresa anterior — nunca sai barato."]
+      .map(s=>'<li>'+esc(s)+'</li>').join("")+'</ol></div>';
+
+  h+='</div></div></div>';
+  $("#viewSoft").innerHTML=h;
+  bindSoft();
+}
+
+function bindSoft(){
+  const box=$("#viewSoft");
+
+  box.querySelectorAll("[data-pitch]").forEach(ta=>{
+    ta.oninput=()=>{S.pitch[ta.dataset.pitch]=ta.value;pitchWc();lazySave();};
+  });
+  pitchWc();
+
+  box.querySelectorAll("[data-star-f]").forEach(ta=>{
+    ta.oninput=()=>{
+      const [k,f]=ta.dataset.starF.split("|");
+      (S.star[k]=S.star[k]||{})[f]=ta.value;
+      const n=starFilled(k),full=n===STAR_F.length;
+      const badge=box.querySelector('[data-star="'+k+'"] .badge');
+      badge.textContent=full?"pronta":n+"/"+STAR_F.length;
+      badge.classList.toggle("on",full);
+      lazySave();
+    };
+  });
+
+  box.querySelectorAll("[data-beh],[data-ask]").forEach(cb=>{
+    const ask="ask" in cb.dataset, bag=ask?S.ask:S.beh, k=ask?cb.dataset.ask:cb.dataset.beh;
+    cb.onchange=()=>{
+      if(cb.checked) bag[k]=1; else delete bag[k];
+      cb.closest(".tick").classList.toggle("on",cb.checked);
+      save();
+    };
+  });
+
+  pitchT=makeTimer("#pClock","#pStart",90,"Ensaiar 90s");
+  drillT=makeTimer("#dClock","#dStart",120,"Iniciar 2 min");
+  $("#pStart").onclick=pitchT.toggle;
+  $("#pReset").onclick=pitchT.reset;
+  $("#dStart").onclick=drillT.toggle;
+  $("#dNew").onclick=()=>{
+    const q=$("#drillQ");
+    let n=ALL_BEH[Math.floor(Math.random()*ALL_BEH.length)];
+    if(n===q.dataset.q) n=ALL_BEH[(ALL_BEH.indexOf(n)+1)%ALL_BEH.length];
+    q.dataset.q=n;q.textContent=n;q.className="drill-q";
+    drillT.reset();
+  };
+}
+
 /* ---------- render geral ---------- */
 function render(){
   const n=DIAS.filter(d=>S.done[d.d]).length;
   $("#mProg").textContent=n+"/25";
   $("#mBar").style.width=(n/25*100)+"%";
   $("#viewTrilha").hidden=view!=="trilha";
+  $("#viewSoft").hidden=view!=="soft";
   $("#viewChecklist").hidden=view!=="checklist";
   $("#viewRecursos").hidden=view!=="recursos";
+  if(view!=="soft") stopSoftTimers();
   if(view==="trilha"){renderRail();renderDay();}
+  if(view==="soft") renderSoft();
   if(view==="checklist") renderChecklist();
   if(view==="recursos") renderRecursos();
 }
@@ -837,7 +1358,7 @@ function initPWA(){
     const f=ev.target.files[0];if(!f)return;
     try{
       const d=JSON.parse(await f.text());
-      for(const k of ["done","ex","notes","chk"]) if(d[k]&&typeof d[k]==="object") S[k]=Object.assign({},S[k],d[k]);
+      for(const k of KEYS) if(d[k]&&typeof d[k]==="object") S[k]=Object.assign({},S[k],d[k]);
       save();render();toast("Progresso importado");
     }catch(e){toast("Arquivo inválido");}
     ev.target.value="";
